@@ -1,0 +1,381 @@
+fileFormatVersion: 2
+guid: cc948e86f8aff1840915430ad6ff9cb1
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 24
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PropsPieces_0
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 534
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c130fff9626eeb94ca0fc41cb8ba36d0
+      internalID: -482020579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PropsPieces_1
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 528
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 004aba0775e098b45828d974b8dae0a8
+      internalID: 80138525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PropsPieces_2
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 527
+        width: 14
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c4fdcea268e75546864b72e4477fe06
+      internalID: 1001997000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PropsPieces_4
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 665
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fbda63eedd33b54aaac063d2ae068c8
+      internalID: 1964747421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PropsPieces_5
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 656
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dca7e5b6abd6a794eb9e127aa867fb74
+      internalID: 325390975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PropsPieces_6
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 655
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9703d3f3c18e17248baf94495da9b3b5
+      internalID: 1182865900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      PropsPieces_0: -482020579
+      PropsPieces_1: 80138525
+      PropsPieces_10: -941765678
+      PropsPieces_100: -1108181626
+      PropsPieces_101: -184427739
+      PropsPieces_11: 1049387161
+      PropsPieces_12: -1035150874
+      PropsPieces_13: 2099159431
+      PropsPieces_14: -319489110
+      PropsPieces_15: -1947036790
+      PropsPieces_16: -1713708856
+      PropsPieces_17: 693415523
+      PropsPieces_18: 796238978
+      PropsPieces_19: 980951681
+      PropsPieces_2: 1001997000
+      PropsPieces_20: -2039493450
+      PropsPieces_21: 841007206
+      PropsPieces_22: -1518066086
+      PropsPieces_23: -1340037340
+      PropsPieces_24: 1015873382
+      PropsPieces_25: -1429138727
+      PropsPieces_26: -995022381
+      PropsPieces_27: 1354293166
+      PropsPieces_28: 765764021
+      PropsPieces_29: -1524091898
+      PropsPieces_3: -308065230
+      PropsPieces_30: -1549619384
+      PropsPieces_31: -1612661611
+      PropsPieces_32: -751653204
+      PropsPieces_33: 2074941317
+      PropsPieces_34: 1641220152
+      PropsPieces_35: 1983702878
+      PropsPieces_36: -1387954983
+      PropsPieces_37: 1890559171
+      PropsPieces_38: -905261103
+      PropsPieces_39: -1121880846
+      PropsPieces_4: 1964747421
+      PropsPieces_40: 1076834521
+      PropsPieces_41: 1796203995
+      PropsPieces_42: 725385126
+      PropsPieces_43: -483337258
+      PropsPieces_44: -446541963
+      PropsPieces_45: -1080518779
+      PropsPieces_46: 1275367256
+      PropsPieces_47: 2107690538
+      PropsPieces_48: -151074672
+      PropsPieces_49: -1777700912
+      PropsPieces_5: 325390975
+      PropsPieces_50: 726144609
+      PropsPieces_51: -309746661
+      PropsPieces_52: 1816293474
+      PropsPieces_53: -1955351250
+      PropsPieces_54: 1823671211
+      PropsPieces_55: 2001462490
+      PropsPieces_56: 1412043237
+      PropsPieces_57: 2086522694
+      PropsPieces_58: 1650226599
+      PropsPieces_59: 1023944972
+      PropsPieces_6: 1182865900
+      PropsPieces_60: -1617042503
+      PropsPieces_61: 993609380
+      PropsPieces_62: 1594663421
+      PropsPieces_63: 322287036
+      PropsPieces_64: -1524176398
+      PropsPieces_65: 2145324715
+      PropsPieces_66: 1073644198
+      PropsPieces_67: 1568221405
+      PropsPieces_68: -1683318762
+      PropsPieces_69: 1081176331
+      PropsPieces_7: 664249776
+      PropsPieces_70: -1670429896
+      PropsPieces_71: 1247832454
+      PropsPieces_72: -1674362663
+      PropsPieces_73: 1096477159
+      PropsPieces_74: -71474644
+      PropsPieces_75: -67027573
+      PropsPieces_76: 472203799
+      PropsPieces_77: -1025624458
+      PropsPieces_78: 1225727498
+      PropsPieces_79: -340482498
+      PropsPieces_8: 106602787
+      PropsPieces_80: -1646681157
+      PropsPieces_81: -183894822
+      PropsPieces_82: -1114487620
+      PropsPieces_83: -2069821474
+      PropsPieces_84: -1130546560
+      PropsPieces_85: -2116094140
+      PropsPieces_86: 841266672
+      PropsPieces_87: -694833176
+      PropsPieces_88: -531105592
+      PropsPieces_89: 772059366
+      PropsPieces_9: 654539215
+      PropsPieces_90: 1672085354
+      PropsPieces_91: 2103544317
+      PropsPieces_92: 2015131963
+      PropsPieces_93: -1481513558
+      PropsPieces_94: 2095687832
+      PropsPieces_95: 70915951
+      PropsPieces_96: -1863110591
+      PropsPieces_97: 1996309055
+      PropsPieces_98: -58485028
+      PropsPieces_99: 1651723050
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

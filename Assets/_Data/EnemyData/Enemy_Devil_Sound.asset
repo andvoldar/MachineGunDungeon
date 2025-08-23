@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a2cc1a826c3384c8c30df0bab07300, type: 3}
+  m_Name: Enemy_Devil_Sound
+  m_EditorClassIdentifier: 
+  enemyGetsHitSound:
+    Guid:
+      Data1: 1546032756
+      Data2: 1206344888
+      Data3: -1116169591
+      Data4: -1809872461
+    Path: event:/ENEMY/EnemyGetsHit
+  enemyDeathSound:
+    Guid:
+      Data1: -884447456
+      Data2: 1157595954
+      Data3: -2059740797
+      Data4: 1087346189
+    Path: event:/ENEMY/Enemy_Devil_Death
+  enemyGetsHitVoiceSound:
+    Guid:
+      Data1: -889400291
+      Data2: 1261301556
+      Data3: 1273737642
+      Data4: 1995089985
+    Path: event:/ENEMY/EnemyGetsHit_VocalFx
+  enemyAttackVoiceSound:
+    Guid:
+      Data1: -337225699
+      Data2: 1134356981
+      Data3: -1617518172
+      Data4: -700627974
+    Path: event:/ENEMY/EnemyAttack_VocalFx
+  enemyMeleeAttackSound:
+    Guid:
+      Data1: 1795723410
+      Data2: 1294728348
+      Data3: -971297093
+      Data4: 1786037799
+    Path: event:/ENEMY/EnemyMeleeAttack

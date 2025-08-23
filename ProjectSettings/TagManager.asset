@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Pickup
+  - Enemy
+  - DestructibleObject
+  - Wall
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Bullets
+  - Player
+  - Enemy
+  - Obstacle
+  - EnemyMovementCollider
+  - PlayerMovementCollider
+  - Interactable
+  - WeaponCollider
+  - DestructibleObject
+  - Floor
+  - EnemyHitbox
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Floor
+    uniqueID: 423149843
+    locked: 0
+  - name: BackgroundElements
+    uniqueID: 2621778323
+    locked: 0
+  - name: Decoration
+    uniqueID: 3612722001
+    locked: 0
+  - name: Agents
+    uniqueID: 1247671483
+    locked: 0
+  - name: AttackVFX
+    uniqueID: 4096969199
+    locked: 0
+  - name: Forground
+    uniqueID: 3915579639
+    locked: 0
+  - name: Bullets
+    uniqueID: 3843621841
+    locked: 0
+  - name: Projectile Impacts
+    uniqueID: 2298549883
+    locked: 0
+  - name: LaserBeams
+    uniqueID: 2365642357
+    locked: 0
+  - name: UI_1
+    uniqueID: 4017063945
+    locked: 0
+  - name: UI_2
+    uniqueID: 1940908491
+    locked: 0
+  - name: UI_CURSOR
+    uniqueID: 1181008177
+    locked: 0

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88298babf93d06f488f7b799b48ee2dd, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: 
+  soundEvents:
+  - {fileID: 11400000, guid: d1b003b3d3371024e8611a96a9cc7da6, type: 2}
+  - {fileID: 11400000, guid: 219928f3eba69c644902bf66d2c04190, type: 2}
+  - {fileID: 11400000, guid: 2721fbc27124f994d828450cb79dc62c, type: 2}
+  - {fileID: 11400000, guid: 11b883e99cb2f4540989047383e6a5bf, type: 2}
+  - {fileID: 11400000, guid: a6d71484bc4c08c48929786b910d59d3, type: 2}
+  - {fileID: 11400000, guid: 6d4d2dba1cd88b84ba3de9debea712d2, type: 2}
+  - {fileID: 11400000, guid: c248a23b6989aa6449a7d1614d56cfe2, type: 2}
+  - {fileID: 11400000, guid: 89cc0200c43080a499d80a4972027d5b, type: 2}
+  - {fileID: 11400000, guid: 3e53f514e26b12b4298471381cf17c22, type: 2}
+  - {fileID: 11400000, guid: 35e26c75b4e7a164da153047462d124c, type: 2}
+  - {fileID: 11400000, guid: a32d0ac5c11fe9141b4298d696a5b164, type: 2}
+  - {fileID: 11400000, guid: 74ad7f459ca98104bb97c4e4b8a9aed9, type: 2}
+  - {fileID: 11400000, guid: 190b8d005777c7549947cb7eeb8150d9, type: 2}
+  - {fileID: 11400000, guid: c4f7aded56b0bb94f89ac898514adfd5, type: 2}
+  - {fileID: 11400000, guid: f3c818a0e4f45fa44b1a6d938752062c, type: 2}
+  - {fileID: 11400000, guid: 1b4d62325ef170746b0c0d307a138fba, type: 2}
+  - {fileID: 11400000, guid: 99a42f61d8aeedd46817323d14f5f5b5, type: 2}
+  - {fileID: 11400000, guid: cd2d3f4a4bc7f924dbe75c58a1069e62, type: 2}
+  - {fileID: 11400000, guid: 39f01082c71e39d419fea2d44bb6b916, type: 2}
+  - {fileID: 11400000, guid: 35f07cf6dbed35246b45795d6bb78cee, type: 2}
+  - {fileID: 11400000, guid: 69c28b4f8fad99345bf0c37236ff6cf4, type: 2}
+  - {fileID: 11400000, guid: 3987da669d4a33f499b826bc8a6988dc, type: 2}
+  - {fileID: 11400000, guid: b6f4bd0c44b82bf47b834a3778210b05, type: 2}
+  - {fileID: 11400000, guid: 2b4eae2fa540a5843bb85d52d10708d6, type: 2}
+  - {fileID: 11400000, guid: 9527d411826109a44be3cf802f9d6a90, type: 2}
+  - {fileID: 11400000, guid: fc77fc88f309afc4180acc4242263541, type: 2}
+  - {fileID: 11400000, guid: c7286e43cbf73a34ca067017ecbfe492, type: 2}
+  - {fileID: 11400000, guid: 6812f0130cc647d458433b7af4581e38, type: 2}
+  - {fileID: 11400000, guid: c9e6565b64774964dac034ef3af95bbd, type: 2}
+  - {fileID: 11400000, guid: 23f230f2713e8914ba1591f0c2c39306, type: 2}
+  - {fileID: 11400000, guid: d9ae275cd0d53944fa47662c5a247a1b, type: 2}
+  - {fileID: 11400000, guid: cb57f9ca3bf3aa14185ff7401b7ffd9b, type: 2}
+  - {fileID: 11400000, guid: 657a516eddb978e4b903f91ed6eb52da, type: 2}
+  laserBusPath: bus:/SFX/Laser

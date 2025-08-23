@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BigDevil_AC
+  m_Controller: {fileID: 9100000, guid: 462ba8dd862861d4b8a661e9cfbf4c72, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a161533ba183e2444a8f4dbc9fa26c80, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 480d6a3d0b5455043bea2ddfd7e62cc1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 82b141ef51a6bac46b850bcad764ed81, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 86f7d4be2ea0d03459633221e54c99f0, type: 2}

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0de75a37ab48d4fb1b2e3c8915ef10, type: 3}
+  m_Name: BloodSwordData
+  m_EditorClassIdentifier: 
+  <PickupSprite>k__BackingField: {fileID: 21300000, guid: 5246201c13dde1848b871384b13e5c35, type: 3}
+  <WeaponPrefab>k__BackingField: {fileID: 9090792961592075296, guid: 33496cc9ebf776b4cb65f0ed0a51b0c2, type: 3}
+  <BulletData>k__BackingField: {fileID: 0}
+  <AmmoCapacity>k__BackingField: 10000
+  <AutomaticFire>k__BackingField: 1
+  <WeaponDelay>k__BackingField: 0.1
+  <SpreadAngle>k__BackingField: 5
+  multiBulletShoot: 0
+  bulletCount: 1
+  gunSoundFMOD:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Damage: 10
+  Cooldown: 0.3
+  SwingAngle: 180
+  SwingDuration: 0.25
+  KnockbackForce: 15
+  KnockbackDuration: 0.2
+  SwingSound:
+    Guid:
+      Data1: 1832311199
+      Data2: 1118872105
+      Data3: 498326433
+      Data4: -532405751
+    Path: event:/SWORD/SwordSlash
+  HitSound:
+    Guid:
+      Data1: -934036277
+      Data2: 1225739431
+      Data3: -1686873458
+      Data4: 874297942
+    Path: event:/SWORD/SwordHit

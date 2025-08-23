@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91bb9bbfcf4a53643b02dec51bee94c1, type: 3}
+  m_Name: PistolBulletSO
+  m_EditorClassIdentifier: 
+  <bulletPrefab>k__BackingField: {fileID: 8955905837099069663, guid: 8bfc9005c8a31814e9789095fb6562a8, type: 3}
+  <BulletSpeed>k__BackingField: 25.3
+  <Damage>k__BackingField: 1
+  <Friction>k__BackingField: 0.1
+  <Bounce>k__BackingField: 0
+  <GoThroughHittable>k__BackingField: 0
+  <IsRaycast>k__BackingField: 0
+  <ImpactObstaclePrefab>k__BackingField: {fileID: 4094641926644099211, guid: b58b1195173d1b84bb1017c9d54ef8e7, type: 3}
+  <ImpactEnemyPrefab>k__BackingField: {fileID: 4060794050997760507, guid: d252cef7b2f8f3041943a8d6833fb901, type: 3}
+  <KnockbackPower>k__BackingField: 5
+  <KnockbackDuration>k__BackingField: 0.3
+  obstacleImpactSound:
+    Guid:
+      Data1: 616124086
+      Data2: 1332241580
+      Data3: 1018095289
+      Data4: 1098164604
+    Path: event:/WEAPON/BULLETImpact/Impact_Obstacle
+  <bulletLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 896
