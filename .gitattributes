@@ -1,2 +1,40 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Unity YAML files (text, mergeable)
+*.unity     merge=unityyamlmerge text
+*.prefab    merge=unityyamlmerge text
+*.asset     merge=unityyamlmerge text
+*.mat       merge=unityyamlmerge text
+*.anim      merge=unityyamlmerge text
+*.controller merge=unityyamlmerge text
+
+# Code
+*.cs        text diff=csharp
+*.shader    text
+
+# Images → LFS
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+*.hdr filter=lfs diff=lfs merge=lfs -text
+
+# Audio → LFS
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.flac filter=lfs diff=lfs merge=lfs -text
+*.aiff filter=lfs diff=lfs merge=lfs -text
+
+# Video → LFS
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+
+# 3D models → LFS
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.3ds filter=lfs diff=lfs merge=lfs -text
+
+# FMOD banks → LFS
+*.bank filter=lfs diff=lfs merge=lfs -text
+*.fsb  filter=lfs diff=lfs merge=lfs -text
