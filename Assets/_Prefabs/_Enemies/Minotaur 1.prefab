@@ -154,6 +154,8 @@ GameObject:
   - component: {fileID: 4625623190049038135}
   - component: {fileID: 7185423094939585346}
   - component: {fileID: 3085908029983552016}
+  - component: {fileID: 1316204941157396612}
+  - component: {fileID: 9036570820628528343}
   m_Layer: 8
   m_Name: Minotaur 1
   m_TagString: Enemy
@@ -375,7 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9a524a23139ae040bd9ffba6e7a08c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 200
   OnHit:
     m_PersistentCalls:
       m_Calls:
@@ -403,17 +405,53 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1316204941157396612}
+        m_TargetAssemblyTypeName: AgentSoundBoss, Assembly-CSharp
+        m_MethodName: PlayGetHitVoiceSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1316204941157396612}
+        m_TargetAssemblyTypeName: AgentSoundBoss, Assembly-CSharp
+        m_MethodName: PlayHitSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1316204941157396612}
+        m_TargetAssemblyTypeName: AgentSoundBoss, Assembly-CSharp
+        m_MethodName: PlayDeathVoiceSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   projectilePrefab: {fileID: 8707087411491075183, guid: ad98476a953415347ab7130b683a1d37, type: 3}
   firePoint: {fileID: 438920104656605966}
   minotaurBulletData: {fileID: 11400000, guid: b007566c35145034594b2f7a2e7fa5de, type: 2}
   maxRangedAttacks: 3
   rangedAttackCooldown: 5
-  dashDistanceThreshold: 4
-  walkDistanceThreshold: 3
-  rangedAttackDistanceThreshold: 7
+  dashDistanceThreshold: 3
+  walkDistanceThreshold: 2
+  rangedAttackDistanceThreshold: 6
   spriteRenderer: {fileID: 954932998115423644}
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
@@ -473,3 +511,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   feedbackToPlay:
   - {fileID: 7185423094939585346}
+--- !u!114 &1316204941157396612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8828913954211597560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a140f3b661d47941bdb4fd36245897c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundDelay: 0.4
+--- !u!114 &9036570820628528343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8828913954211597560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca81a33ad028c845861cdf9be381d48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

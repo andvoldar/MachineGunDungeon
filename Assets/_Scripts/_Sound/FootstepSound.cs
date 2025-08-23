@@ -6,4 +6,5 @@ public class FootstepSound : MonoBehaviour
 {
     public void PlayFootstepSound() =>SoundManager.Instance.PlaySound(SoundType.PlayerFootstep, transform.position);
     public void PlayEnemyFootstepSound() => SoundManager.Instance.PlaySound(SoundType.EnemyFootstep, transform.position);
+    public void PlayminotaurFootstepSound() => SoundManager.Instance.PlaySound(SoundType.MinotaurFootstepSFX, transform.position);
 }

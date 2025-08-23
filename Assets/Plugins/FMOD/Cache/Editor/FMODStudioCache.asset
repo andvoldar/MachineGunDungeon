@@ -272,7 +272,7 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.bank
   Name: Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638886345587112591
+  lastModified: 638915872986171236
   FileSizes:
   - Name: Desktop
     Value: 84192
@@ -400,7 +400,7 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/EnemyBank.bank
   Name: Desktop/EnemyBank
   StudioPath: bank:/EnemyBank
-  lastModified: 638886568047514042
+  lastModified: 638915847638726878
   FileSizes:
   - Name: Desktop
     Value: 156768
@@ -594,6 +594,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2561953899220370683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/FOOTSTEPS/MinotaurFootsteps
+  m_EditorClassIdentifier: 
+  Path: event:/FOOTSTEPS/MinotaurFootsteps
+  Guid:
+    Data1: 949722727
+    Data2: 1170927705
+    Data3: -395710814
+    Data4: 1868897693
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-1802174877797094681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,8 +667,8 @@ MonoBehaviour:
     Data3: -1116169591
     Data4: -1809872461
   Banks:
-  - {fileID: 5341754760879950578}
   - {fileID: -4945079953812283213}
+  - {fileID: 5341754760879950578}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -742,8 +769,35 @@ MonoBehaviour:
     Data3: -2059740797
     Data4: 1087346189
   Banks:
-  - {fileID: 5341754760879950578}
   - {fileID: -4945079953812283213}
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-945350825183723329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ENEMY/MINOTAUR BOSS/Minotaur_Death
+  m_EditorClassIdentifier: 
+  Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_Death
+  Guid:
+    Data1: -868718369
+    Data2: 1085270626
+    Data3: -627914354
+    Data4: -2111405836
+  Banks:
+  - {fileID: 5341754760879950578}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -841,12 +895,19 @@ MonoBehaviour:
   - {fileID: 4661986172958200360}
   - {fileID: -1432016466016923204}
   - {fileID: -8270013632475463124}
+  - {fileID: 6160907335660669296}
+  - {fileID: 2715402241462758331}
+  - {fileID: -945350825183723329}
+  - {fileID: 3842175307836478790}
+  - {fileID: 4854728894354802057}
+  - {fileID: 9077037428873557580}
+  - {fileID: -2561953899220370683}
   EditorParameters: []
   MasterBanks:
   - {fileID: -5560062504756564189}
   StringsBanks:
   - {fileID: 6072974680870910410}
-  cacheTime: 638886568047514042
+  cacheTime: 638915877328955423
   cacheVersion: 131846
 --- !u!114 &112262912172719355
 MonoBehaviour:
@@ -1083,8 +1144,35 @@ MonoBehaviour:
     Data3: 1273737642
     Data4: 1995089985
   Banks:
-  - {fileID: 5341754760879950578}
   - {fileID: -4945079953812283213}
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &2715402241462758331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ENEMY/MINOTAUR BOSS/Minotaur_GetHit
+  m_EditorClassIdentifier: 
+  Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_GetHit
+  Guid:
+    Data1: 1394309311
+    Data2: 1296990394
+    Data3: 1581915060
+    Data4: -609304741
+  Banks:
+  - {fileID: 5341754760879950578}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -1114,6 +1202,33 @@ MonoBehaviour:
   - {fileID: 5341754760879950578}
   IsStream: 0
   Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &3842175307836478790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ENEMY/MINOTAUR BOSS/Minotaur_Attack
+  m_EditorClassIdentifier: 
+  Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_Attack
+  Guid:
+    Data1: -1670967312
+    Data2: 1195106681
+    Data3: 1747559866
+    Data4: 530893922
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -1157,6 +1272,33 @@ MonoBehaviour:
     Data2: 1281497581
     Data3: -1342340691
     Data4: 1721465552
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &4854728894354802057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ENEMY/MINOTAUR BOSS/Minotaur_DistanceAttack
+  m_EditorClassIdentifier: 
+  Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_DistanceAttack
+  Guid:
+    Data1: -123335444
+    Data2: 1218185706
+    Data3: -2100922748
+    Data4: -1019023698
   Banks:
   - {fileID: 5341754760879950578}
   IsStream: 0
@@ -1235,10 +1377,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/FX.bank
   Name: Desktop/FX
   StudioPath: bank:/FX
-  lastModified: 638886367383275552
+  lastModified: 638915877328955423
   FileSizes:
   - Name: Desktop
-    Value: 1027552
+    Value: 1175424
   Exists: 1
 --- !u!114 &5426974592329799359
 MonoBehaviour:
@@ -1363,11 +1505,38 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.strings.bank
   Name: Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638886345587127830
+  lastModified: 638915872986191550
   FileSizes:
   - Name: Desktop
-    Value: 3254
+    Value: 3614
   Exists: 1
+--- !u!114 &6160907335660669296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ENEMY/MINOTAUR BOSS/Minotaur_Scream
+  m_EditorClassIdentifier: 
+  Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_Scream
+  Guid:
+    Data1: -219023348
+    Data2: 1331905699
+    Data3: 784544406
+    Data4: -1462484298
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &6565559254992357304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1491,6 +1660,33 @@ MonoBehaviour:
   - {fileID: 5341754760879950578}
   IsStream: 0
   Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &9077037428873557580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PROJECTILES/Fireball
+  m_EditorClassIdentifier: 
+  Path: event:/PROJECTILES/Fireball
+  Guid:
+    Data1: 1289087727
+    Data2: 1102129472
+    Data3: 2006276224
+    Data4: -751612017
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1

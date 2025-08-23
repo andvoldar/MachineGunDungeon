@@ -46,4 +46,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d9ae275cd0d53944fa47662c5a247a1b, type: 2}
   - {fileID: 11400000, guid: cb57f9ca3bf3aa14185ff7401b7ffd9b, type: 2}
   - {fileID: 11400000, guid: 657a516eddb978e4b903f91ed6eb52da, type: 2}
+  - {fileID: 11400000, guid: 655a9edbeca035f4380581ee285c461f, type: 2}
+  - {fileID: 11400000, guid: 616ef30d753326342ad8069167db5fcf, type: 2}
+  - {fileID: 11400000, guid: e527881c71e9927469968149b70e83f9, type: 2}
+  - {fileID: 11400000, guid: 378467f8fbb1b0f4a9e206adf62cb57b, type: 2}
+  - {fileID: 11400000, guid: 6f3657dcbb2d369479518c0946ec51b4, type: 2}
+  - {fileID: 11400000, guid: 3e8c6db9895813f4eb72f7c424c51545, type: 2}
+  - {fileID: 11400000, guid: 3d37f1ed6cdced245ba01477bbf33785, type: 2}
   laserBusPath: bus:/SFX/Laser

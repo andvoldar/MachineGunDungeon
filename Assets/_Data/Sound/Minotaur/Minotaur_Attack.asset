@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 194ea5117e1614945b1c3bc29992153e, type: 3}
-  m_Name: PlayerDash
+  m_Name: Minotaur_Attack
   m_EditorClassIdentifier: 
-  type: 4
+  type: 37
   fmodEvent:
     Guid:
-      Data1: 1167758463
-      Data2: 1085254542
-      Data3: 879884213
-      Data4: -1436338138
-    Path: event:/PLAYER/PlayerDashSFX
+      Data1: -1670967312
+      Data2: 1195106681
+      Data3: 1747559866
+      Data4: 530893922
+    Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_Attack
   isLoop: 0
-  maxVoices: 2
+  maxVoices: 1
   audibleRange: 50
   ignoreHearingRange: 0

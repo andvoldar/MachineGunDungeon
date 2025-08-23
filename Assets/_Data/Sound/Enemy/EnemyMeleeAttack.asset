@@ -22,3 +22,5 @@ MonoBehaviour:
     Path: event:/ENEMY/Devil/EnemyMeleeAttack
   isLoop: 0
   maxVoices: 8
+  audibleRange: 100
+  ignoreHearingRange: 0

@@ -47,7 +47,16 @@ public enum SoundType
 
     BoxDestroyedSFX,
     HitDestructibleSFX,
-    PickupAmmoSFX
+    PickupAmmoSFX,
+
+    MinotaurGetHitSFX,
+    MinotaurAttackSFX,
+    MinotaurDeathSFX,
+    MinotaurScreamSFX,
+    MinotaurDistanceAttackSFX,
+
+    FireballSFX,
+    MinotaurFootstepSFX
 }
 
 /// <summary>

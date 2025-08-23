@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 194ea5117e1614945b1c3bc29992153e, type: 3}
-  m_Name: PlayerDash
+  m_Name: FireballSFX
   m_EditorClassIdentifier: 
-  type: 4
+  type: 41
   fmodEvent:
     Guid:
-      Data1: 1167758463
-      Data2: 1085254542
-      Data3: 879884213
-      Data4: -1436338138
-    Path: event:/PLAYER/PlayerDashSFX
+      Data1: 1289087727
+      Data2: 1102129472
+      Data3: 2006276224
+      Data4: -751612017
+    Path: event:/PROJECTILES/Fireball
   isLoop: 0
-  maxVoices: 2
-  audibleRange: 50
+  maxVoices: 20
+  audibleRange: 25
   ignoreHearingRange: 0

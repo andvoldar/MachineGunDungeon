@@ -17,6 +17,14 @@ public class MinotaurProjectile : Bullet
         }
     }
 
+    private void Start()
+    {
+        PlayProjectileSound();
+    }
+
+    public void PlayProjectileSound() =>
+        SoundManager.Instance.PlaySound(SoundType.EnemyHit, transform.position);
+
     private void FixedUpdate()
     {
         if (rb != null && bulletData != null)
@@ -81,4 +89,8 @@ public class MinotaurProjectile : Bullet
                     collision.transform.position + (Vector3)(Random.insideUnitCircle * 0.5f),
                     Quaternion.identity);
     }
+
+
+
+
 }
