@@ -18,7 +18,7 @@ public class BossRoomLogic : RoomLogicBase
     public int destructibleCountMin = 3;
     public int destructibleCountMax = 8;
 
-    private Enemy bossInstance;
+    private MinotaurBoss bossInstance;
 
     public override void OnRoomGenerated()
     {
@@ -50,7 +50,7 @@ public class BossRoomLogic : RoomLogicBase
 
         GameObject go = Instantiate(bossPrefab, spawnPos, Quaternion.identity, transform);
         go.name = "Boss";
-        bossInstance = go.GetComponent<Enemy>();
+        bossInstance = go.GetComponent<MinotaurBoss>();
 
         if (bossInstance == null)
         {
