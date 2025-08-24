@@ -31,7 +31,7 @@ public class AgentSoundBoss : MonoBehaviour
         SoundManager.Instance.PlaySound(SoundType.MinotaurGetHitSFX, transform.position);
 
     public void PlayDashSound() =>
-    SoundManager.Instance.PlaySound(SoundType.PlayerDash, transform.position);
+    SoundManager.Instance.PlaySound(SoundType.MinotaurDashSFX, transform.position);
 
     public void PlayDeathVFXSound() =>
         StartCoroutine(DelayedDeathVFX());

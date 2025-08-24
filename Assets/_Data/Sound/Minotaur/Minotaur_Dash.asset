@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 194ea5117e1614945b1c3bc29992153e, type: 3}
-  m_Name: PlayerSlowMotionSFX
+  m_Name: Minotaur_Dash
   m_EditorClassIdentifier: 
-  type: 5
+  type: 43
   fmodEvent:
     Guid:
-      Data1: -2093172390
-      Data2: 1170894837
-      Data3: -160382576
-      Data4: 1073279037
-    Path: event:/PLAYER/PlayerSlowMotionSFX
+      Data1: 599468548
+      Data2: 1096365000
+      Data3: 1592621214
+      Data4: 1297612827
+    Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_Dash
   isLoop: 0
   maxVoices: 2
-  audibleRange: 25
-  ignoreHearingRange: 1
+  audibleRange: 15
+  ignoreHearingRange: 0

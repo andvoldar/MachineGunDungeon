@@ -1,17 +1,12 @@
-﻿using UnityEngine;
+﻿// Assets/_Scripts/Rooms/RoomController.cs
+using UnityEngine;
 
 [RequireComponent(typeof(RandomShapeRoomGenerator))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class RoomController : MonoBehaviour
 {
-    public enum RoomType
-    {
-        Start,
-        Enemy,
-        Boss
-    }
+    public enum RoomType { Start, Enemy, Boss }
 
-    [Tooltip("Tipo de sala: Start, Enemy o Boss.")]
     public RoomType roomType = RoomType.Enemy;
 
     [Header("Prefabs de Jugador y Arma")]
@@ -145,7 +140,7 @@ public class RoomController : MonoBehaviour
         }
 
         Vector3Int cellMin = new Vector3Int(minX, minY, 0);
-        Vector3Int cellMax = new Vector3Int(maxX + 1, maxY + 1, 0); // +1 para incluir última fila/col
+        Vector3Int cellMax = new Vector3Int(maxX + 1, maxY + 1, 0);
 
         Vector3 worldMin = gen.floorTilemap.CellToWorld(cellMin);
         Vector3 worldMax = gen.floorTilemap.CellToWorld(cellMax);
@@ -165,8 +160,10 @@ public class RoomController : MonoBehaviour
         {
             playerInside = true;
 
+            // 🚀 Ahora pasamos el Transform del player,
+            // para que la lógica pueda esperar 1 tile dentro antes de levantar barreras.
             if (!roomVisited && roomLogic != null)
-                roomLogic.OnPlayerEnteredRoom();
+                roomLogic.OnPlayerEnteredRoom(other.transform);
 
             roomVisited = true;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿// Assets/_Scripts/Rooms/EnemyRoomLogic.cs
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyRoomLogic : RoomLogicBase
@@ -24,16 +25,25 @@ public class EnemyRoomLogic : RoomLogicBase
 
     public override void OnRoomGenerated()
     {
-        base.OnRoomGenerated(); // incluye SpawnEnergyBarriers y torches
+        base.OnRoomGenerated(); // crea barreras y antorchas
 
         SpawnFloorTraps();
         SpawnDestructibleObjects();
-        PrepareEnemySpawns(); // aún no instanciamos enemigos
+        PrepareEnemySpawns(); // Aún NO instanciamos
 
         if (pendingEnemySpawns.Count == 0)
         {
-            RaiseRoomCleared(); // sin enemigos, marcar como limpia
+            RaiseRoomCleared(); // no hay enemigos
         }
+    }
+
+    /// <summary>
+    /// El spawn REAL sucede cuando las barreras ya están arriba.
+    /// </summary>
+    protected override void OnBarriersActivated()
+    {
+        if (IsRoomCleared) return;
+        SpawnPendingEnemies();
     }
 
     private void PrepareEnemySpawns()
@@ -52,7 +62,7 @@ public class EnemyRoomLogic : RoomLogicBase
         foreach (var cell in cells)
         {
             if (placed >= enemyCount) break;
-            if (occupiedCells.Contains(cell)) continue;
+            if (occupiedCells != null && occupiedCells.Contains(cell)) continue;
 
             pendingEnemySpawns.Add(cell);
             placed++;
@@ -73,6 +83,7 @@ public class EnemyRoomLogic : RoomLogicBase
             if (e != null)
             {
                 enemiesInRoom.Add(e);
+                if (occupiedCells == null) occupiedCells = new HashSet<Vector2Int>();
                 occupiedCells.Add(cell);
                 e.OnDeath.AddListener(() => OnEnemyDied(e));
                 e.TriggerSpawnVFX();
@@ -105,7 +116,7 @@ public class EnemyRoomLogic : RoomLogicBase
         {
             if (spawned >= toSpawn) break;
             if (Random.value > trapProbability) continue;
-            if (occupiedCells.Contains(cell)) continue;
+            if (occupiedCells != null && occupiedCells.Contains(cell)) continue;
             if (generator.UpDoors.Contains(cell) || generator.DownDoors.Contains(cell)
              || generator.LeftDoors.Contains(cell) || generator.RightDoors.Contains(cell))
                 continue;
@@ -113,6 +124,7 @@ public class EnemyRoomLogic : RoomLogicBase
             Vector3 world = generator.floorTilemap.CellToWorld((Vector3Int)cell) + new Vector3(0.5f, 0.5f, 0f);
             var go = Instantiate(floorTrapPrefab, world, Quaternion.identity, transform);
             go.name = $"FloorTrap_{cell.x}_{cell.y}";
+            if (occupiedCells == null) occupiedCells = new HashSet<Vector2Int>();
             occupiedCells.Add(cell);
             spawned++;
         }
@@ -126,7 +138,7 @@ public class EnemyRoomLogic : RoomLogicBase
         var floorSet = new List<Vector2Int>(generator.FloorPositions);
         var available = new List<Vector2Int>();
         foreach (var cell in floorSet)
-            if (!occupiedCells.Contains(cell))
+            if (occupiedCells == null || !occupiedCells.Contains(cell))
                 available.Add(cell);
         if (available.Count == 0) return;
 
@@ -137,12 +149,13 @@ public class EnemyRoomLogic : RoomLogicBase
         foreach (var cell in available)
         {
             if (spawned >= toSpawn) break;
-            if (occupiedCells.Contains(cell)) continue;
+            if (occupiedCells != null && occupiedCells.Contains(cell)) continue;
 
             Vector3 world = generator.floorTilemap.CellToWorld((Vector3Int)cell) + new Vector3(0.5f, 0.5f, 0f);
             var prefab = destructiblePrefabs[Random.Range(0, destructiblePrefabs.Length)];
             var go = Instantiate(prefab, world, Quaternion.identity, transform);
             go.name = $"Destructible_{cell.x}_{cell.y}";
+            if (occupiedCells == null) occupiedCells = new HashSet<Vector2Int>();
             occupiedCells.Add(cell);
             spawned++;
         }
@@ -155,14 +168,6 @@ public class EnemyRoomLogic : RoomLogicBase
         {
             RaiseRoomCleared();
         }
-    }
-
-    public override void OnPlayerEnteredRoom()
-    {
-        if (IsRoomCleared) return;
-
-        SpawnPendingEnemies(); // solo se instancian ahora
-        base.OnPlayerEnteredRoom(); // activa barreras si no limpia
     }
 
     public override void RegisterListeners()

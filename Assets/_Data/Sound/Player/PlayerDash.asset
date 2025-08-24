@@ -23,4 +23,4 @@ MonoBehaviour:
   isLoop: 0
   maxVoices: 2
   audibleRange: 50
-  ignoreHearingRange: 0
+  ignoreHearingRange: 1

@@ -1,5 +1,6 @@
-﻿// RoomLogicBase.cs
+﻿// Assets/_Scripts/Rooms/RoomLogicBase.cs
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,36 +9,31 @@ public abstract class RoomLogicBase : MonoBehaviour
 {
     public RandomShapeRoomGenerator generator;
 
-    /// <summary>
-    /// Prefab de antorcha y offsets, heredados del RoomController.
-    /// </summary>
     [HideInInspector] public GameObject torchPrefab;
     [HideInInspector] public int torchOffsetMin;
     [HideInInspector] public int torchOffsetMax;
-
 
     [Header("Barrera de energía")]
     [Tooltip("Prefab que se instancia en cada apertura de puerta.")]
     public GameObject energyBarrierPrefab;
 
+    [Tooltip("Duración del 'appear' visual antes de habilitar el collider.")]
+    public float barrierAppearDuration = 0.3f;
+
+    [Tooltip("VFX opcional al aparecer cada barrera.")]
+    public GameObject barrierSpawnVFXPrefab;
+
     protected List<EnergyBarrier> spawnedBarriers = new List<EnergyBarrier>();
     private bool roomCleared = false;
     public bool IsRoomCleared => roomCleared;
 
-    /// <summary>
-    /// Evento que se dispara justo después de que la sala termine de generarse.
-    /// </summary>
     public event Action OnRoomGeneratedEvent;
-
-    /// <summary>
-    /// Evento que se dispara cuando la sala queda limpia de enemigos/boss.
-    /// </summary>
     public event Action<RoomLogicBase> OnRoomCleared;
 
-    /// <summary>
-    /// Conjunto de celdas ocupadas (por antorchas, trampas, enemigos, etc.)
-    /// </summary>
     protected HashSet<Vector2Int> occupiedCells;
+
+    // Control interno para no reactivar en la misma visita
+    private bool _barriersActivated = false;
 
     protected virtual void Awake()
     {
@@ -48,7 +44,7 @@ public abstract class RoomLogicBase : MonoBehaviour
     {
         occupiedCells = new HashSet<Vector2Int>();
         SpawnTorchesInCorners();
-        SpawnEnergyBarriers();
+        SpawnEnergyBarriers(); // crea pero deja desactivadas
         OnRoomGeneratedEvent?.Invoke();
     }
 
@@ -58,17 +54,128 @@ public abstract class RoomLogicBase : MonoBehaviour
     protected void RaiseRoomCleared()
     {
         roomCleared = true;
-        foreach (var b in spawnedBarriers)
-            b.DisableBarrier();
-
+        foreach (var b in spawnedBarriers) b.DisableBarrier();
         OnRoomCleared?.Invoke(this);
     }
 
+    /// <summary>
+    /// Versión nueva con referencia al player. Espera a que pase 1 tile hacia dentro
+    /// desde la puerta más cercana y entonces aparece la barrera y se llama al hook.
+    /// </summary>
+    public virtual void OnPlayerEnteredRoom(Transform playerTransform)
+    {
+        if (roomCleared || _barriersActivated) return;
+        StartCoroutine(ActivateBarriersWhenPlayerIsInsideRoutine(playerTransform));
+    }
+
+    /// <summary>
+    /// Conserva compatibilidad si alguien llama la versión antigua sin parámetro.
+    /// Usará la posición actual del objeto "Player" en escena si existe.
+    /// </summary>
     public virtual void OnPlayerEnteredRoom()
     {
-        if (roomCleared) return;
+        var player = GameObject.FindWithTag("Player");
+        if (player != null) OnPlayerEnteredRoom(player.transform);
+    }
+
+    /// <summary>
+    /// Hook que se dispara justo después de que TODAS las barreras
+    /// hayan completado su 'appear' (colliders ON).
+    /// </summary>
+    protected virtual void OnBarriersActivated() { }
+
+    private IEnumerator ActivateBarriersWhenPlayerIsInsideRoutine(Transform playerT)
+    {
+        if (playerT == null || generator == null || generator.floorTilemap == null)
+            yield break;
+
+        // 1) Localizar puerta más cercana al player (en mundo)
+        Vector3 doorCenterWorld, inwardDir;
+        if (!TryGetNearestDoorCenterAndInward(playerT.position, out doorCenterWorld, out inwardDir))
+        {
+            // Si no hay puertas (raro), activa sin esperar
+            yield return StartCoroutine(AppearAllBarriersRoutine());
+            yield break;
+        }
+
+        // 2) Esperar a que cruce 1 tile hacia dentro de la sala
+        float tileWorld = Mathf.Abs(generator.floorTilemap.cellSize.x) > 0.0001f
+            ? generator.floorTilemap.cellSize.x
+            : 1f;
+        float threshold = tileWorld; // 1 tile exacto
+
+        while (playerT != null)
+        {
+            Vector3 toPlayer = playerT.position - doorCenterWorld;
+            float along = Vector3.Dot(toPlayer, inwardDir); // proyección dentro
+            if (along >= threshold) break;
+            yield return null;
+        }
+
+        // 3) Aparecer TODAS las barreras (render ON inmediato, collider al final)
+        yield return StartCoroutine(AppearAllBarriersRoutine());
+
+        // 4) Hook: ahora ya podemos spawnear enemigos, etc.
+        _barriersActivated = true;
+        OnBarriersActivated();
+    }
+
+    private IEnumerator AppearAllBarriersRoutine()
+    {
         foreach (var b in spawnedBarriers)
-            b.EnableBarrier();
+        {
+            if (b != null)
+                StartCoroutine(b.Appear(barrierAppearDuration, true, barrierSpawnVFXPrefab));
+        }
+        if (barrierAppearDuration > 0f)
+            yield return new WaitForSeconds(barrierAppearDuration);
+        else
+            yield return null;
+    }
+
+    private bool TryGetNearestDoorCenterAndInward(Vector3 playerWorldPos, out Vector3 doorCenterWorld, out Vector3 inwardDir)
+    {
+        doorCenterWorld = Vector3.zero;
+        inwardDir = Vector3.zero;
+
+        // Centro de la sala en mundo
+        Vector3 centerWorld = generator.floorTilemap.CellToWorld(
+            new Vector3Int(generator.RoomCenter.x, generator.RoomCenter.y, 0)
+        ) + new Vector3(0.5f, 0.5f, 0f);
+
+        // Todas las puertas
+        var doorGroups = new List<List<Vector2Int>> {
+            generator.UpDoors, generator.DownDoors, generator.LeftDoors, generator.RightDoors
+        };
+
+        float bestDistSqr = float.MaxValue;
+        bool found = false;
+
+        foreach (var group in doorGroups)
+        {
+            if (group == null || group.Count == 0) continue;
+
+            // Centro del hueco (promedio de 3 celdas) en mundo
+            Vector3 avg = Vector3.zero;
+            foreach (var c in group)
+            {
+                avg += generator.floorTilemap.CellToWorld((Vector3Int)c) + new Vector3(0.5f, 0.5f, 0f);
+            }
+            avg /= group.Count;
+
+            float d2 = (playerWorldPos - avg).sqrMagnitude;
+            if (d2 < bestDistSqr)
+            {
+                bestDistSqr = d2;
+                doorCenterWorld = avg;
+                inwardDir = (centerWorld - avg);
+                inwardDir.z = 0f;
+                if (inwardDir.sqrMagnitude > 0.0001f) inwardDir.Normalize();
+                found = true;
+            }
+        }
+
+        return found;
     }
 
     private void SpawnEnergyBarriers()
@@ -88,7 +195,7 @@ public abstract class RoomLogicBase : MonoBehaviour
             List<Vector2Int> doorCells = pair.Value;
             if (doorCells == null || doorCells.Count == 0) continue;
 
-            // Calcular centro del hueco de puerta (3 celdas)
+            // Centro del hueco (3 celdas)
             Vector3 avgPos = Vector3.zero;
             foreach (var cell in doorCells)
             {
@@ -100,29 +207,20 @@ public abstract class RoomLogicBase : MonoBehaviour
             GameObject go = Instantiate(energyBarrierPrefab, avgPos, Quaternion.identity, transform);
             go.name = $"Barrier_{pair.Key}";
 
-            // Escala siempre 3x1
+            // Escala 3x1; rotación para vertical
             go.transform.localScale = new Vector3(3f, 1f, 1f);
-
-            // Rotar si es vertical
             if (pair.Key == "Left" || pair.Key == "Right")
                 go.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
 
             var barrier = go.GetComponent<EnergyBarrier>();
             if (barrier != null)
             {
-                barrier.DisableBarrier();
+                barrier.DisableBarrier(); // arrancan ocultas
                 spawnedBarriers.Add(barrier);
             }
         }
     }
 
-
-
-    /// <summary>
-    /// Spawnea antorchas en las cuatro esquinas de la habitación con un mismo offset aleatorio
-    /// entre torchOffsetMin y torchOffsetMax. Todas las antorchas usan el mismo offset.
-    /// Marca las celdas donde se colocan para que no se instancien otros objetos encima.
-    /// </summary>
     private void SpawnTorchesInCorners()
     {
         if (torchPrefab == null || generator == null || generator.FloorPositions == null || generator.floorTilemap == null)
@@ -131,7 +229,6 @@ public abstract class RoomLogicBase : MonoBehaviour
         var floorSet = generator.FloorPositions;
         if (floorSet.Count == 0) return;
 
-        // Calcular bounds en coordenadas de celda
         int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
         foreach (var cell in floorSet)
         {
@@ -141,15 +238,13 @@ public abstract class RoomLogicBase : MonoBehaviour
             if (cell.y > maxY) maxY = cell.y;
         }
 
-        // Escoger offset único para todas las esquinas
         int offset = UnityEngine.Random.Range(torchOffsetMin, torchOffsetMax + 1);
 
-        // Definir esquinas base (sin offset)
         Vector2Int[] baseCorners = {
-            new Vector2Int(minX, minY), // bottom-left
-            new Vector2Int(maxX, minY), // bottom-right
-            new Vector2Int(minX, maxY), // top-left
-            new Vector2Int(maxX, maxY)  // top-right
+            new Vector2Int(minX, minY),
+            new Vector2Int(maxX, minY),
+            new Vector2Int(minX, maxY),
+            new Vector2Int(maxX, maxY)
         };
 
         foreach (var corner in baseCorners)
@@ -159,7 +254,6 @@ public abstract class RoomLogicBase : MonoBehaviour
 
             Vector2Int torchCell = corner + dirX * offset + dirY * offset;
 
-            // Si torchCell no está en floorSet, recortarlo dentro de bounds
             if (!floorSet.Contains(torchCell))
             {
                 torchCell.x = Mathf.Clamp(torchCell.x, minX, maxX);
@@ -172,6 +266,7 @@ public abstract class RoomLogicBase : MonoBehaviour
             GameObject torchGO = Instantiate(torchPrefab, spawnPos, Quaternion.identity, transform);
             torchGO.name = $"Torch_{torchCell.x}_{torchCell.y}";
 
+            if (occupiedCells == null) occupiedCells = new HashSet<Vector2Int>();
             occupiedCells.Add(torchCell);
         }
     }

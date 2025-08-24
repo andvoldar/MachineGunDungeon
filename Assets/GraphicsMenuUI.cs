@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.EventSystems; // para click al abrir el dropdown
+using UnityEngine.EventSystems; // para sonido al abrir el dropdown
 
 public class GraphicsMenuUI : MonoBehaviour
 {
@@ -19,17 +19,29 @@ public class GraphicsMenuUI : MonoBehaviour
     [Header("Sonidos (opcional)")]
     [SerializeField] private StartMenuSoundController soundController; // usa el mismo que en StartMenuUI
 
-    [Header("Filtro (solo 16:9, de 720p a 4K)")]
-    [SerializeField] private int minWidth = 1280;
+    [Header("Filtro de resoluciones (solo 16:9)")]
+    [SerializeField] private int minWidth = 1280; // mínimo 720p
     [SerializeField] private int minHeight = 720;
-    [SerializeField] private int maxWidth = 3840;   // 4K
-    [SerializeField] private int maxHeight = 2160;  // 4K
-    [SerializeField] private bool onlyExactSixteenByNine = true; // SOLO 16:9 exacto
+    [SerializeField] private int maxWidth = 3840; // 4K
+    [SerializeField] private int maxHeight = 2160; // 4K
+    [SerializeField] private bool onlyExactSixteenByNine = true; // mantener 16:9 exacto
 
-    // Lista final de opciones (solo pares WxH)
+    // Lista canónica 16:9 que SIEMPRE se muestra en el dropdown
+    private readonly List<Vector2Int> canonical16x9 =
+        new List<Vector2Int>
+        {
+            new Vector2Int(1280,  720),   // 720p
+            new Vector2Int(1600,  900),   // 900p
+            new Vector2Int(1920, 1080),   // 1080p
+            new Vector2Int(2560, 1440),   // 1440p
+            new Vector2Int(3200, 1800),   // 1800p
+            new Vector2Int(3840, 2160),   // 4K UHD
+        };
+
+    // Opciones finales mostradas (filtradas por rango/16:9)
     private List<Vector2Int> resOptions = new List<Vector2Int>();
 
-    // Para SFX al abrir dropdown
+    // SFX al abrir el desplegable
     private bool dropdownClickHooked = false;
 
     // PlayerPrefs
@@ -44,11 +56,11 @@ public class GraphicsMenuUI : MonoBehaviour
 
     private void OnEnable()
     {
-        RebuildResolutionOptions(fullscreenToggle != null ? fullscreenToggle.isOn : Screen.fullScreen);
+        BuildCanonicalOptions();
         BuildResolutionDropdown();
         SyncFromPrefs();
 
-        // Listeners (limpiamos y re-asignamos)
+        // Listeners
         resolutionDropdown.onValueChanged.RemoveListener(OnResolutionChanged);
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
 
@@ -58,7 +70,7 @@ public class GraphicsMenuUI : MonoBehaviour
         backButton.onClick.RemoveListener(HandleBack);
         backButton.onClick.AddListener(HandleBack);
 
-        EnsureDropdownOpenClickSFX(); // sonido al abrir el desplegable
+        EnsureDropdownOpenClickSFX();
     }
 
     private void OnDisable()
@@ -68,102 +80,36 @@ public class GraphicsMenuUI : MonoBehaviour
         backButton.onClick.RemoveListener(HandleBack);
     }
 
-    // ------------------- RES LIST -------------------
+    // ------------------- Opciones 16:9 -------------------
 
-    /// <summary>
-    /// Reconstruye la lista de resoluciones 16:9 desde 720p hasta 4K.
-    /// Combina: resoluciones físicas del sistema (si las hay) + una lista canónica.
-    /// En FULLSCREEN, limita a la capacidad del display; en Windowed, permite hasta 4K.
-    /// </summary>
-    private void RebuildResolutionOptions(bool fullscreenMode)
+    private void BuildCanonicalOptions()
     {
-        var set = new HashSet<Vector2Int>();
+        resOptions = canonical16x9
+            .Where(v => v.x >= minWidth && v.y >= minHeight)
+            .Where(v => v.x <= maxWidth && v.y <= maxHeight)
+            .Where(v => !onlyExactSixteenByNine || v.x * 9 == v.y * 16)
+            .OrderBy(v => v.x).ThenBy(v => v.y)
+            .ToList();
 
-        // 1) Aporta las resoluciones que reporta el sistema (filtradas a 16:9 exacto y rango)
-        foreach (var r in Screen.resolutions)
-        {
-            if (!PassesAspectFilter(r.width, r.height)) continue;
-            if (!PassesRange(r.width, r.height)) continue;
-            set.Add(new Vector2Int(r.width, r.height));
-        }
-
-        // 2) Aporta la lista canónica 16:9 de 720p a 4K (por si el SO no reporta alguna)
-        foreach (var v in GetCanonical16x9UpTo4K())
-        {
-            if (!PassesRange(v.x, v.y)) continue;
-            set.Add(v);
-        }
-
-        // 3) En FULLSCREEN, recorta a la capacidad del display (no tiene sentido ofrecer > nativo)
-        if (fullscreenMode)
-        {
-            // Máximo físico (aprox): usa la mayor WxH del sistema
-            int sysMaxW = Screen.resolutions.Length > 0 ? Screen.resolutions.Max(r => r.width) : Display.main.systemWidth;
-            int sysMaxH = Screen.resolutions.Length > 0 ? Screen.resolutions.Max(r => r.height) : Display.main.systemHeight;
-            set.RemoveWhere(v => v.x > sysMaxW || v.y > sysMaxH);
-        }
-        else
-        {
-            // En Windowed permitimos hasta el tope 4K (controlado por maxWidth/maxHeight)
-            set.RemoveWhere(v => v.x > maxWidth || v.y > maxHeight);
-        }
-
-        // 4) Ordena ascendente
-        resOptions = set.OrderBy(v => v.x).ThenBy(v => v.y).ToList();
-
-        // Fallback si la lista quedara vacía
         if (resOptions.Count == 0)
         {
+            // Fallback: fuerza 16:9 dentro de rango
             var cur = new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height);
-            resOptions.Add(ClampTo16x9Range(cur));
+            int w = Mathf.Clamp(cur.x, minWidth, maxWidth);
+            int h = Mathf.RoundToInt(w * 9f / 16f);
+            resOptions.Add(new Vector2Int(w, Mathf.Clamp(h, minHeight, maxHeight)));
         }
     }
-
-    private bool PassesAspectFilter(int w, int h)
-    {
-        if (!onlyExactSixteenByNine) return true;
-        return w * 9 == h * 16; // 16:9 exacto
-    }
-
-    private bool PassesRange(int w, int h)
-    {
-        return w >= minWidth && h >= minHeight && w <= maxWidth && h <= maxHeight;
-    }
-
-    private Vector2Int ClampTo16x9Range(Vector2Int v)
-    {
-        int w = Mathf.Clamp(v.x, minWidth, maxWidth);
-        int h = Mathf.Clamp(v.y, minHeight, maxHeight);
-        // fuerza 16:9 por altura
-        h = Mathf.RoundToInt(w * 9f / 16f);
-        return new Vector2Int(w, h);
-    }
-
-    private IEnumerable<Vector2Int> GetCanonical16x9UpTo4K()
-    {
-        // Lista canónica 16:9 desde 720p hasta 4K (puedes añadir 5K si quieres)
-        yield return new Vector2Int(1280, 720);   // 720p
-        yield return new Vector2Int(1600, 900);   // 900p
-        yield return new Vector2Int(1920, 1080);  // 1080p
-        yield return new Vector2Int(2560, 1440);  // 1440p
-        yield return new Vector2Int(3200, 1800);  // 1800p
-        yield return new Vector2Int(3840, 2160);  // 4K UHD
-    }
-
-    // ------------------- UI BUILD / SYNC -------------------
 
     private void BuildResolutionDropdown()
     {
         resolutionDropdown.ClearOptions();
-        var opts = resOptions
-            .Select(v => new TMP_Dropdown.OptionData($"{v.x} x {v.y}"))
-            .ToList();
+        var opts = resOptions.Select(v => new TMP_Dropdown.OptionData($"{v.x} x {v.y}")).ToList();
         resolutionDropdown.AddOptions(opts);
     }
 
     private void SyncFromPrefs()
     {
-        // Sincroniza con PlayerPrefs y/o con la resolución actual si el índice guardado no sirve
         int idxSaved = PlayerPrefs.GetInt(KEY_RES_INDEX, -1);
         int idx;
 
@@ -173,7 +119,6 @@ public class GraphicsMenuUI : MonoBehaviour
         }
         else
         {
-            // Si la actual no está en la lista (p.ej. 1366x768), busca la más cercana por área dentro del set válido
             var cur = new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height);
             idx = GetClosestIndexTo(cur);
         }
@@ -186,61 +131,89 @@ public class GraphicsMenuUI : MonoBehaviour
 
     private int GetClosestIndexTo(Vector2Int target)
     {
-        long targetArea = (long)target.x * (long)target.y;
-
-        int bestIndex = 0;
-        long bestDelta = long.MaxValue;
+        long targetArea = (long)target.x * target.y;
+        int bestIndex = 0; long bestDelta = long.MaxValue;
 
         for (int i = 0; i < resOptions.Count; i++)
         {
             var v = resOptions[i];
-            long area = (long)v.x * (long)v.y;
+            long area = (long)v.x * v.y;
             long delta = System.Math.Abs(area - targetArea);
-            if (delta < bestDelta)
-            {
-                bestDelta = delta;
-                bestIndex = i;
-            }
+            if (delta < bestDelta) { bestDelta = delta; bestIndex = i; }
         }
         return bestIndex;
     }
 
-    // ------------------- APPLY -------------------
+    private Vector2Int GetSystemMaxResolution()
+    {
+        // Usa Screen.resolutions si está poblado; si no, Display.main.systemWidth/Height
+        int w = Screen.resolutions.Length > 0 ? Screen.resolutions.Max(r => r.width) : Display.main.systemWidth;
+        int h = Screen.resolutions.Length > 0 ? Screen.resolutions.Max(r => r.height) : Display.main.systemHeight;
+        return new Vector2Int(w, h);
+    }
+
+    private int GetBestIndexUnderCap(Vector2Int cap)
+    {
+        // Devuelve la mayor resolución <= cap (por área)
+        int best = 0; long bestArea = -1;
+        for (int i = 0; i < resOptions.Count; i++)
+        {
+            var v = resOptions[i];
+            if (v.x <= cap.x && v.y <= cap.y)
+            {
+                long area = (long)v.x * v.y;
+                if (area > bestArea) { bestArea = area; best = i; }
+            }
+        }
+        return best;
+    }
+
+    // ------------------- Aplicación -------------------
 
     private void Apply(int resIndex, bool fullscreen)
     {
         resIndex = Mathf.Clamp(resIndex, 0, resOptions.Count - 1);
-        var v = resOptions[resIndex];
+        var desired = resOptions[resIndex];
 
-        Screen.SetResolution(v.x, v.y, fullscreen);
+        if (fullscreen)
+        {
+            // Si el monitor no soporta esa resolución en fullscreen, baja a la más alta válida
+            Vector2Int cap = GetSystemMaxResolution();
+            if (desired.x > cap.x || desired.y > cap.y)
+            {
+                int fallback = GetBestIndexUnderCap(cap);
+                desired = resOptions[fallback];
+                // Refleja el ajuste en el dropdown
+                resolutionDropdown.SetValueWithoutNotify(fallback);
+                resIndex = fallback;
+            }
+
+            Screen.SetResolution(desired.x, desired.y, true);
+        }
+        else
+        {
+            Screen.SetResolution(desired.x, desired.y, false);
+        }
 
         PlayerPrefs.SetInt(KEY_RES_INDEX, resIndex);
         PlayerPrefs.SetInt(KEY_FULLSCREEN, fullscreen ? 1 : 0);
         PlayerPrefs.Save();
     }
 
-    // ------------------- CALLBACKS -------------------
+    // ------------------- Callbacks -------------------
 
     private void OnResolutionChanged(int index)
     {
         Apply(index, fullscreenToggle.isOn);
-        soundController?.PlayClickSound(); // sonido al seleccionar opción
+        soundController?.PlayClickSound();
     }
 
     private void OnFullscreenChanged(bool on)
     {
-        // Al cambiar de modo regeneramos la lista (ej.: en fullscreen no ofrecer > nativo)
-        var prevRes = resOptions[Mathf.Clamp(resolutionDropdown.value, 0, Mathf.Max(0, resOptions.Count - 1))];
-
-        RebuildResolutionOptions(on);
-        BuildResolutionDropdown();
-
-        // Selecciona la más cercana a la anterior
-        int newIndex = GetClosestIndexTo(prevRes);
-        resolutionDropdown.SetValueWithoutNotify(newIndex);
-
-        Apply(newIndex, on);
-        soundController?.PlayClickSound(); // sonido al cambiar toggle
+        // No cambiamos lista ni etiquetas; solo aplicamos la resolución actual en el modo nuevo
+        int curIndex = Mathf.Clamp(resolutionDropdown.value, 0, Mathf.Max(0, resOptions.Count - 1));
+        Apply(curIndex, on);
+        soundController?.PlayClickSound();
     }
 
     private void HandleBack()

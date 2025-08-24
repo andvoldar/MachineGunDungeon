@@ -272,10 +272,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.bank
   Name: Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638916568719888395
+  lastModified: 638916797969275353
   FileSizes:
   - Name: Desktop
-    Value: 84192
+    Value: 84320
   Exists: 1
 --- !u!114 &-5402920995202966500
 MonoBehaviour:
@@ -902,12 +902,13 @@ MonoBehaviour:
   - {fileID: 4854728894354802057}
   - {fileID: 9077037428873557580}
   - {fileID: -2561953899220370683}
+  - {fileID: 2420726526219585092}
   EditorParameters: []
   MasterBanks:
   - {fileID: -5560062504756564189}
   StringsBanks:
   - {fileID: 6072974680870910410}
-  cacheTime: 638916656545150749
+  cacheTime: 638916799277508207
   cacheVersion: 131846
 --- !u!114 &112262912172719355
 MonoBehaviour:
@@ -1120,6 +1121,33 @@ MonoBehaviour:
   - {fileID: 5341754760879950578}
   IsStream: 0
   Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &2420726526219585092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ENEMY/MINOTAUR BOSS/Minotaur_Dash
+  m_EditorClassIdentifier: 
+  Path: event:/ENEMY/MINOTAUR BOSS/Minotaur_Dash
+  Guid:
+    Data1: 599468548
+    Data2: 1096365000
+    Data3: 1592621214
+    Data4: 1297612827
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -1377,10 +1405,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/FX.bank
   Name: Desktop/FX
   StudioPath: bank:/FX
-  lastModified: 638916656545150749
+  lastModified: 638916799277508207
   FileSizes:
   - Name: Desktop
-    Value: 1168224
+    Value: 1169472
   Exists: 1
 --- !u!114 &5426974592329799359
 MonoBehaviour:
@@ -1505,10 +1533,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.strings.bank
   Name: Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638916568719903781
+  lastModified: 638916797969291090
   FileSizes:
   - Name: Desktop
-    Value: 3612
+    Value: 3646
   Exists: 1
 --- !u!114 &6160907335660669296
 MonoBehaviour:

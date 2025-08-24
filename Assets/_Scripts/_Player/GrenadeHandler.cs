@@ -12,7 +12,7 @@ public class GrenadeHandler : MonoBehaviour
 
     private GrenadeDataSO equippedGrenade;
     private int grenadeCount;
-    private const int maxGrenadeCount = 3; // puedes hacer esto variable si lo necesitas
+    private const int maxGrenadeCount = 10; // puedes hacer esto variable si lo necesitas
 
     private bool isChargingThrow;
     private float throwCharge;

@@ -56,7 +56,8 @@ public enum SoundType
     MinotaurDistanceAttackSFX,
 
     FireballSFX,
-    MinotaurFootstepSFX
+    MinotaurFootstepSFX,
+    MinotaurDashSFX
 }
 
 /// <summary>
