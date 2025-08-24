@@ -57,13 +57,19 @@ public class GameManager : MonoBehaviour
         GameObject canvasGO = new GameObject("PointerCanvas");
         pointerCanvas = canvasGO.AddComponent<Canvas>();
         pointerCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        pointerCanvas.sortingOrder = 1000;
 
-        CanvasScaler scaler = canvasGO.AddComponent<CanvasScaler>();
+        // Muy importante: que realmente ordene por encima
+        pointerCanvas.overrideSorting = true;
+        pointerCanvas.sortingOrder = 32760;
+
+
+        var scaler = canvasGO.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080);
 
-        canvasGO.AddComponent<GraphicRaycaster>();
+
+        var raycaster = canvasGO.AddComponent<GraphicRaycaster>();
+        raycaster.enabled = false;
 
         DontDestroyOnLoad(canvasGO);
     }

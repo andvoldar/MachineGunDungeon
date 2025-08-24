@@ -272,7 +272,7 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.bank
   Name: Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638915872986171236
+  lastModified: 638916568719888395
   FileSizes:
   - Name: Desktop
     Value: 84192
@@ -400,7 +400,7 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/EnemyBank.bank
   Name: Desktop/EnemyBank
   StudioPath: bank:/EnemyBank
-  lastModified: 638915847638726878
+  lastModified: 638916568447727796
   FileSizes:
   - Name: Desktop
     Value: 156768
@@ -745,7 +745,7 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Music.bank
   Name: Desktop/Music
   StudioPath: bank:/Music
-  lastModified: 638813859519291982
+  lastModified: 638916568450982802
   FileSizes:
   - Name: Desktop
     Value: 5312288
@@ -907,7 +907,7 @@ MonoBehaviour:
   - {fileID: -5560062504756564189}
   StringsBanks:
   - {fileID: 6072974680870910410}
-  cacheTime: 638915877328955423
+  cacheTime: 638916656545150749
   cacheVersion: 131846
 --- !u!114 &112262912172719355
 MonoBehaviour:
@@ -1377,10 +1377,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/FX.bank
   Name: Desktop/FX
   StudioPath: bank:/FX
-  lastModified: 638915877328955423
+  lastModified: 638916656545150749
   FileSizes:
   - Name: Desktop
-    Value: 1175424
+    Value: 1168224
   Exists: 1
 --- !u!114 &5426974592329799359
 MonoBehaviour:
@@ -1505,10 +1505,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.strings.bank
   Name: Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638915872986191550
+  lastModified: 638916568719903781
   FileSizes:
   - Name: Desktop
-    Value: 3614
+    Value: 3612
   Exists: 1
 --- !u!114 &6160907335660669296
 MonoBehaviour:

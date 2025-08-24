@@ -21,6 +21,12 @@ public class StartMenuUI : MonoBehaviour
     private bool isTransitioning = false;
     private List<Button> allMenuButtons = new List<Button>();
 
+    //OPTIONS MENU PANEL
+    [SerializeField] private GameObject optionsMenuPanel;
+    [SerializeField] private Button optionsButton;
+
+
+
     private void Start()
     {
         if (fadeImage != null)
@@ -54,6 +60,9 @@ public class StartMenuUI : MonoBehaviour
         {
             Debug.LogWarning("No se asignó MenuButtonsContainer en StartMenuUI.");
         }
+
+        if (optionsButton != null)
+            optionsButton.onClick.AddListener(HandleOptionsPressed);
     }
 
     private void HandleStartPressed()
@@ -83,6 +92,19 @@ public class StartMenuUI : MonoBehaviour
             GameManager.Instance.LoadScene(gameplaySceneName);
         }
     }
+
+    private void HandleOptionsPressed()
+    {
+        if (isTransitioning) return;
+
+        if (soundController != null)
+            soundController.PlayClickSound();
+
+        menuButtonsContainer.SetActive(false);
+        optionsMenuPanel.SetActive(true);
+    }
+
+
 
     private void HandleExitPressed()
     {
@@ -139,7 +161,6 @@ public class StartMenuUI : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        Debug.Log("➔ Cerrando el juego...");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
