@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿// Assets/_Scripts/Rooms/BossRoomLogic.cs
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossRoomLogic : RoomLogicBase
@@ -33,6 +34,11 @@ public class BossRoomLogic : RoomLogicBase
         {
             RaiseRoomCleared(); // si no hay boss, sala limpia
         }
+        else
+        {
+            // El boss arranca dormant; definimos sus límites de wander aquí
+            bossInstance.SetWanderBounds(ComputeWanderBounds());
+        }
     }
 
     private void SpawnBoss()
@@ -54,8 +60,24 @@ public class BossRoomLogic : RoomLogicBase
 
         if (bossInstance == null)
         {
-            Debug.LogWarning("[BossRoomLogic] El prefab de boss no tiene componente Enemy.");
+            Debug.LogWarning("[BossRoomLogic] El prefab de boss no tiene componente MinotaurBoss.");
             Destroy(go);
+        }
+    }
+
+    // === Activación al levantar barreras: activa boss + CAMBIO DE MUSICA ===
+    protected override void OnBarriersActivated()
+    {
+        if (IsRoomCleared) return;
+
+        if (bossInstance != null)
+        {
+            // 1) Cambiar música a Boss (crossfade)
+            if (BackgroundMusicController.Instance != null)
+                BackgroundMusicController.Instance.CrossfadeToBoss();
+
+            // 2) Activar IA + grito de entrada
+            bossInstance.ActivateBoss(playScream: true);
         }
     }
 
@@ -69,6 +91,7 @@ public class BossRoomLogic : RoomLogicBase
         int trapCount = Random.Range(trapCountMin, trapCountMax + 1);
         int spawned = 0;
 
+        // Shuffle
         for (int i = 0; i < floorSet.Count; i++)
         {
             int r = Random.Range(i, floorSet.Count);
@@ -179,12 +202,45 @@ public class BossRoomLogic : RoomLogicBase
     public override void RegisterListeners()
     {
         if (bossInstance != null)
-            bossInstance.OnDeath.AddListener(() => RaiseRoomCleared());
+            bossInstance.OnDeath.AddListener(() =>
+            {
+                // Al morir el boss, volver a música ambient
+                if (BackgroundMusicController.Instance != null)
+                    BackgroundMusicController.Instance.CrossfadeToAmbient();
+
+                RaiseRoomCleared();
+            });
     }
 
     public override void UnregisterListeners()
     {
         if (bossInstance != null)
             bossInstance.OnDeath.RemoveAllListeners();
+    }
+
+    private Rect ComputeWanderBounds()
+    {
+        if (generator == null || generator.FloorPositions == null || generator.FloorPositions.Count == 0 || bossInstance == null)
+            return new Rect(bossInstance != null ? bossInstance.transform.position : Vector3.zero, Vector2.one * 6f);
+
+        int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+        foreach (var cell in generator.FloorPositions)
+        {
+            if (cell.x < minX) minX = cell.x;
+            if (cell.x > maxX) maxX = cell.x;
+            if (cell.y < minY) minY = cell.y;
+            if (cell.y > maxY) maxY = cell.y;
+        }
+
+        Vector3 wMin = generator.floorTilemap.CellToWorld(new Vector3Int(minX, minY, 0)) + new Vector3(0.5f, 0.5f, 0f);
+        Vector3 wMax = generator.floorTilemap.CellToWorld(new Vector3Int(maxX, maxY, 0)) + new Vector3(0.5f, 0.5f, 0f);
+
+        float width = Mathf.Abs(wMax.x - wMin.x);
+        float height = Mathf.Abs(wMax.y - wMin.y);
+        float x = Mathf.Min(wMin.x, wMax.x);
+        float y = Mathf.Min(wMin.y, wMax.y);
+
+        float margin = 0.8f;
+        return new Rect(x + margin, y + margin, Mathf.Max(0.5f, width - margin * 2f), Mathf.Max(0.5f, height - margin * 2f));
     }
 }

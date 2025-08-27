@@ -365,6 +365,7 @@ MonoBehaviour:
   moveSpeed: 6
   attackRange: 2
   isFacingRight: 1
+  facingFlipDeadzone: 0.12
 --- !u!114 &8813934621110839637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +379,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 200
+  startActive: 0
+  combatEnabled: 0
   OnHit:
     m_PersistentCalls:
       m_Calls:
@@ -444,6 +447,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 189038525578178326}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   projectilePrefab: {fileID: 8707087411491075183, guid: ad98476a953415347ab7130b683a1d37, type: 3}
   firePoint: {fileID: 438920104656605966}
   minotaurBulletData: {fileID: 11400000, guid: b007566c35145034594b2f7a2e7fa5de, type: 2}
@@ -452,6 +467,13 @@ MonoBehaviour:
   dashDistanceThreshold: 4
   walkDistanceThreshold: 2
   rangedAttackDistanceThreshold: 5
+  minotaurScreamSFX: 39
+  wanderBounds:
+    serializedVersion: 2
+    x: -100
+    y: -100
+    width: 200
+    height: 200
   spriteRenderer: {fileID: 954932998115423644}
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1

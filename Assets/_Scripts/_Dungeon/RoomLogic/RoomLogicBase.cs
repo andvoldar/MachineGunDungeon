@@ -23,9 +23,22 @@ public abstract class RoomLogicBase : MonoBehaviour
     [Tooltip("VFX opcional al aparecer cada barrera.")]
     public GameObject barrierSpawnVFXPrefab;
 
+    [Header("SFX")]
+    [SerializeField, Tooltip("Sonido al 'aparecer' cada barrera (por puerta).")]
+    private SoundType barrierAppearSound = SoundType.EnergyBarrierSFX;
+
+    [SerializeField, Tooltip("Sonido al limpiar la habitación.")]
+    private SoundType roomClearedSound = SoundType.RoomClearedSFX;
+
     protected List<EnergyBarrier> spawnedBarriers = new List<EnergyBarrier>();
+
+    // Estado de limpieza
     private bool roomCleared = false;
     public bool IsRoomCleared => roomCleared;
+
+    // ✅ Control: solo sonará RoomCleared si hubo enemigos reales
+    private bool hadEnemies = false;
+    private int aliveEnemies = 0;
 
     public event Action OnRoomGeneratedEvent;
     public event Action<RoomLogicBase> OnRoomCleared;
@@ -51,27 +64,72 @@ public abstract class RoomLogicBase : MonoBehaviour
     public virtual void RegisterListeners() { }
     public virtual void UnregisterListeners() { }
 
-    protected void RaiseRoomCleared()
+    // ===== API para lógica de enemigos =====
+
+    /// <summary>
+    /// Llama esto cada vez que **instancies** un enemigo en esta sala.
+    /// </summary>
+    public void NotifyEnemySpawned()
     {
+        hadEnemies = true;
+        aliveEnemies++;
+    }
+
+    /// <summary>
+    /// Llama esto cuando un enemigo de esta sala **muera**.
+    /// </summary>
+    public void NotifyEnemyDied()
+    {
+        if (aliveEnemies > 0) aliveEnemies--;
+        if (aliveEnemies == 0) RaiseRoomCleared();
+    }
+
+    /// <summary>
+    /// Si tu generador determina que **no habrá** enemigos, puedes marcar como despejada sin SFX.
+    /// </summary>
+    protected void MarkNoEnemiesAndClearSilently()
+    {
+        if (roomCleared) return;
+        hadEnemies = false;
         roomCleared = true;
         foreach (var b in spawnedBarriers) b.DisableBarrier();
         OnRoomCleared?.Invoke(this);
     }
 
     /// <summary>
-    /// Versión nueva con referencia al player. Espera a que pase 1 tile hacia dentro
-    /// desde la puerta más cercana y entonces aparece la barrera y se llama al hook.
+    /// Dispara el "room cleared" con guardas internas.
+    /// Solo reproduce SFX si hubo combate real.
     /// </summary>
+    protected void RaiseRoomCleared()
+    {
+        if (roomCleared) return;
+        roomCleared = true;
+
+        if (hadEnemies)
+        {
+            // SFX de sala despejada en el centro de la sala
+            if (SoundManager.Instance != null && generator != null && generator.floorTilemap != null)
+            {
+                Vector3 centerWorld = generator.floorTilemap.CellToWorld(
+                    new Vector3Int(generator.RoomCenter.x, generator.RoomCenter.y, 0)
+                ) + new Vector3(0.5f, 0.5f, 0f);
+
+                SoundManager.Instance.PlaySound(roomClearedSound, centerWorld);
+            }
+        }
+
+        foreach (var b in spawnedBarriers) b.DisableBarrier();
+        OnRoomCleared?.Invoke(this);
+    }
+
+    // ===== Entrada del jugador y barreras =====
+
     public virtual void OnPlayerEnteredRoom(Transform playerTransform)
     {
         if (roomCleared || _barriersActivated) return;
         StartCoroutine(ActivateBarriersWhenPlayerIsInsideRoutine(playerTransform));
     }
 
-    /// <summary>
-    /// Conserva compatibilidad si alguien llama la versión antigua sin parámetro.
-    /// Usará la posición actual del objeto "Player" en escena si existe.
-    /// </summary>
     public virtual void OnPlayerEnteredRoom()
     {
         var player = GameObject.FindWithTag("Player");
@@ -89,33 +147,27 @@ public abstract class RoomLogicBase : MonoBehaviour
         if (playerT == null || generator == null || generator.floorTilemap == null)
             yield break;
 
-        // 1) Localizar puerta más cercana al player (en mundo)
         Vector3 doorCenterWorld, inwardDir;
         if (!TryGetNearestDoorCenterAndInward(playerT.position, out doorCenterWorld, out inwardDir))
         {
-            // Si no hay puertas (raro), activa sin esperar
             yield return StartCoroutine(AppearAllBarriersRoutine());
             yield break;
         }
 
-        // 2) Esperar a que cruce 1 tile hacia dentro de la sala
         float tileWorld = Mathf.Abs(generator.floorTilemap.cellSize.x) > 0.0001f
             ? generator.floorTilemap.cellSize.x
             : 1f;
-        float threshold = tileWorld; // 1 tile exacto
+        float threshold = tileWorld;
 
         while (playerT != null)
         {
             Vector3 toPlayer = playerT.position - doorCenterWorld;
-            float along = Vector3.Dot(toPlayer, inwardDir); // proyección dentro
+            float along = Vector3.Dot(toPlayer, inwardDir);
             if (along >= threshold) break;
             yield return null;
         }
 
-        // 3) Aparecer TODAS las barreras (render ON inmediato, collider al final)
         yield return StartCoroutine(AppearAllBarriersRoutine());
-
-        // 4) Hook: ahora ya podemos spawnear enemigos, etc.
         _barriersActivated = true;
         OnBarriersActivated();
     }
@@ -125,8 +177,14 @@ public abstract class RoomLogicBase : MonoBehaviour
         foreach (var b in spawnedBarriers)
         {
             if (b != null)
+            {
+                if (SoundManager.Instance != null)
+                    SoundManager.Instance.PlaySound(barrierAppearSound, b.transform.position);
+
                 StartCoroutine(b.Appear(barrierAppearDuration, true, barrierSpawnVFXPrefab));
+            }
         }
+
         if (barrierAppearDuration > 0f)
             yield return new WaitForSeconds(barrierAppearDuration);
         else
@@ -138,12 +196,10 @@ public abstract class RoomLogicBase : MonoBehaviour
         doorCenterWorld = Vector3.zero;
         inwardDir = Vector3.zero;
 
-        // Centro de la sala en mundo
         Vector3 centerWorld = generator.floorTilemap.CellToWorld(
             new Vector3Int(generator.RoomCenter.x, generator.RoomCenter.y, 0)
         ) + new Vector3(0.5f, 0.5f, 0f);
 
-        // Todas las puertas
         var doorGroups = new List<List<Vector2Int>> {
             generator.UpDoors, generator.DownDoors, generator.LeftDoors, generator.RightDoors
         };
@@ -155,12 +211,9 @@ public abstract class RoomLogicBase : MonoBehaviour
         {
             if (group == null || group.Count == 0) continue;
 
-            // Centro del hueco (promedio de 3 celdas) en mundo
             Vector3 avg = Vector3.zero;
             foreach (var c in group)
-            {
                 avg += generator.floorTilemap.CellToWorld((Vector3Int)c) + new Vector3(0.5f, 0.5f, 0f);
-            }
             avg /= group.Count;
 
             float d2 = (playerWorldPos - avg).sqrMagnitude;
@@ -195,7 +248,6 @@ public abstract class RoomLogicBase : MonoBehaviour
             List<Vector2Int> doorCells = pair.Value;
             if (doorCells == null || doorCells.Count == 0) continue;
 
-            // Centro del hueco (3 celdas)
             Vector3 avgPos = Vector3.zero;
             foreach (var cell in doorCells)
             {
@@ -207,7 +259,6 @@ public abstract class RoomLogicBase : MonoBehaviour
             GameObject go = Instantiate(energyBarrierPrefab, avgPos, Quaternion.identity, transform);
             go.name = $"Barrier_{pair.Key}";
 
-            // Escala 3x1; rotación para vertical
             go.transform.localScale = new Vector3(3f, 1f, 1f);
             if (pair.Key == "Left" || pair.Key == "Right")
                 go.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
@@ -215,7 +266,7 @@ public abstract class RoomLogicBase : MonoBehaviour
             var barrier = go.GetComponent<EnergyBarrier>();
             if (barrier != null)
             {
-                barrier.DisableBarrier(); // arrancan ocultas
+                barrier.DisableBarrier();
                 spawnedBarriers.Add(barrier);
             }
         }

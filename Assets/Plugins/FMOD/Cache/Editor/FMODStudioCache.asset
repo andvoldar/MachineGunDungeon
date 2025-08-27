@@ -176,6 +176,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1920
+--- !u!114 &-6851743618673370939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/MUSIC/BossMusic
+  m_EditorClassIdentifier: 
+  Path: event:/MUSIC/BossMusic
+  Guid:
+    Data1: -136879144
+    Data2: 1189958011
+    Data3: -1646750592
+    Data4: -2067251647
+  Banks:
+  - {fileID: -1274769458235774628}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 105000
 --- !u!114 &-6230479469299009523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,10 +299,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.bank
   Name: Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638916797969275353
+  lastModified: 638918641114153729
   FileSizes:
   - Name: Desktop
-    Value: 84320
+    Value: 85120
   Exists: 1
 --- !u!114 &-5402920995202966500
 MonoBehaviour:
@@ -400,7 +427,7 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/EnemyBank.bank
   Name: Desktop/EnemyBank
   StudioPath: bank:/EnemyBank
-  lastModified: 638916568447727796
+  lastModified: 638918617888696995
   FileSizes:
   - Name: Desktop
     Value: 156768
@@ -621,6 +648,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2291322705898781649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/PauseLPF
+  m_EditorClassIdentifier: 
+  Path: snapshot:/PauseLPF
+  Guid:
+    Data1: 1167647999
+    Data2: 1273679913
+    Data3: -1958113605
+    Data4: -1894728573
+  Banks:
+  - {fileID: -5560062504756564189}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &-1802174877797094681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,10 +799,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Music.bank
   Name: Desktop/Music
   StudioPath: bank:/Music
-  lastModified: 638916568450982802
+  lastModified: 638918646467018782
   FileSizes:
   - Name: Desktop
-    Value: 5312288
+    Value: 5802400
   Exists: 1
 --- !u!114 &-1071881940922398616
 MonoBehaviour:
@@ -903,12 +957,16 @@ MonoBehaviour:
   - {fileID: 9077037428873557580}
   - {fileID: -2561953899220370683}
   - {fileID: 2420726526219585092}
+  - {fileID: -2291322705898781649}
+  - {fileID: 7492968253261389320}
+  - {fileID: 1205194138358496802}
+  - {fileID: -6851743618673370939}
   EditorParameters: []
   MasterBanks:
   - {fileID: -5560062504756564189}
   StringsBanks:
   - {fileID: 6072974680870910410}
-  cacheTime: 638916799277508207
+  cacheTime: 638918646467018782
   cacheVersion: 131846
 --- !u!114 &112262912172719355
 MonoBehaviour:
@@ -963,7 +1021,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 377936
+  Length: 310032
 --- !u!114 &1036761061823010526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,6 +1049,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 43152
+--- !u!114 &1205194138358496802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/DUNGEON/EnergyBarrierSFX
+  m_EditorClassIdentifier: 
+  Path: event:/DUNGEON/EnergyBarrierSFX
+  Guid:
+    Data1: 1036536285
+    Data2: 1099378834
+    Data3: -965044091
+    Data4: -1595683143
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &1309838736864298269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,10 +1490,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/FX.bank
   Name: Desktop/FX
   StudioPath: bank:/FX
-  lastModified: 638916799277508207
+  lastModified: 638918624898275063
   FileSizes:
   - Name: Desktop
-    Value: 1169472
+    Value: 1188800
   Exists: 1
 --- !u!114 &5426974592329799359
 MonoBehaviour:
@@ -1533,10 +1618,10 @@ MonoBehaviour:
   Path: ../../FMOD Studio/MachineGunSound/MachineGunDungeonSound/Build/Desktop/Desktop/Master.strings.bank
   Name: Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638916797969291090
+  lastModified: 638918641114178842
   FileSizes:
   - Name: Desktop
-    Value: 3646
+    Value: 3848
   Exists: 1
 --- !u!114 &6160907335660669296
 MonoBehaviour:
@@ -1610,6 +1695,33 @@ MonoBehaviour:
     Data2: 1166178811
     Data3: -1589820782
     Data4: -785828192
+  Banks:
+  - {fileID: 5341754760879950578}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &7492968253261389320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/DUNGEON/RoomClearedSFX
+  m_EditorClassIdentifier: 
+  Path: event:/DUNGEON/RoomClearedSFX
+  Guid:
+    Data1: -73066375
+    Data2: 1274828470
+    Data3: -1979066722
+    Data4: -1932198544
   Banks:
   - {fileID: 5341754760879950578}
   IsStream: 0

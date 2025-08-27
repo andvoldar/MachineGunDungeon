@@ -10,6 +10,14 @@ public class MinotaurBoss : MonoBehaviour, IHittable
     private int currentHealth;
     private bool isDead = false;
 
+    [Header("Dormant / Activation")]
+    [SerializeField] private bool startActive = false;
+    private bool isDormant = true;
+
+    [Header("Combat State")]
+    [Tooltip("Si es false, el minotauro no persigue, no ataca ni apunta.")]
+    [SerializeField] private bool combatEnabled = false;
+
     [Header("Events")]
     public UnityEvent OnHit;
     public UnityEvent OnDeath;
@@ -18,18 +26,21 @@ public class MinotaurBoss : MonoBehaviour, IHittable
     public GameObject projectilePrefab;
     public Transform firePoint;
     public BulletDataSO minotaurBulletData;
-    
 
     [Header("Ranged Attack Limit")]
     public int maxRangedAttacks = 5;
     public float rangedAttackCooldown = 5f;
-
 
     [Header("Behavior Distances")]
     public float dashDistanceThreshold = 5f;
     public float walkDistanceThreshold = 3f;
     public float rangedAttackDistanceThreshold = 6f;
 
+    [Header("Audio")]
+    public SoundType minotaurScreamSFX = SoundType.MinotaurScreamSFX;
+
+    [Header("Wander Bounds")]
+    [SerializeField] private Rect wanderBounds = new Rect(-100, -100, 200, 200);
 
     private int rangedAttacksDone = 0;
     private float rangedAttackCooldownTimer = 0f;
@@ -38,6 +49,7 @@ public class MinotaurBoss : MonoBehaviour, IHittable
     private MinotaurController controller;
     private MinotaurStateMachine stateMachine;
     private Rigidbody2D rb;
+    private MinotaurWeaponController weaponController;
 
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Color flashColor = Color.white;
@@ -45,21 +57,22 @@ public class MinotaurBoss : MonoBehaviour, IHittable
     private Color originalColor;
     private Coroutine flashCoroutine;
 
-
     public UnityEvent OnGetHitEvent = new UnityEvent();
-    UnityEvent IHittable.OnGetHit
-    {
-        get => OnGetHitEvent;
-        set => OnGetHitEvent = value;
-    }
+    UnityEvent IHittable.OnGetHit { get => OnGetHitEvent; set => OnGetHitEvent = value; }
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         controller = GetComponent<MinotaurController>();
         rb = GetComponent<Rigidbody2D>();
+        weaponController = GetComponent<MinotaurWeaponController>();
         stateMachine = new MinotaurStateMachine(this);
 
-        originalColor = spriteRenderer.color; // ✅ Guardamos el color real
+        originalColor = spriteRenderer != null ? spriteRenderer.color : Color.white;
+
+        isDormant = !startActive;
+        combatEnabled = startActive && !isDormant;
+        SetComponentsEnabled(!isDormant);
     }
 
     private void Start()
@@ -70,92 +83,134 @@ public class MinotaurBoss : MonoBehaviour, IHittable
 
     private void Update()
     {
-        if (!isDead)
-        {
-            stateMachine.CurrentState?.OnUpdate();
+        if (isDead || isDormant) return;
 
-            if (rangedAttackCooldownTimer > 0f)
+        stateMachine.CurrentState?.OnUpdate();
+
+        if (rangedAttackCooldownTimer > 0f)
+        {
+            rangedAttackCooldownTimer -= Time.deltaTime;
+            if (rangedAttackCooldownTimer <= 0f)
             {
-                rangedAttackCooldownTimer -= Time.deltaTime;
-                if (rangedAttackCooldownTimer <= 0f)
-                {
-                    rangedAttackCooldownTimer = 0f;
-                    rangedAttacksDone = 0;
-                }
+                rangedAttackCooldownTimer = 0f;
+                rangedAttacksDone = 0;
             }
         }
     }
 
     private void FixedUpdate()
     {
+        if (isDead || isDormant) return;
         stateMachine?.FixedUpdate();
     }
 
-    public void OnGetHit()
+    // ===== Activation API =====
+    public void ActivateBoss(bool playScream = true)
     {
-        // Opcional: podrías poner efectos visuales aquí
+        if (!isDormant) return;
+
+        isDormant = false;
+        combatEnabled = true;
+        SetComponentsEnabled(true);
+
+        if (playScream) PlayScreamSFX();
+
+        ResetAnimatorCombatTriggers();
+        animator.SetBool("Idle", true);
+        animator.SetBool("Run", false);
+        stateMachine.ChangeState(new MinotaurIdleState(stateMachine));
     }
+
+    private void SetComponentsEnabled(bool enabled)
+    {
+        if (controller != null) controller.enabled = enabled;
+        if (weaponController != null) weaponController.enabled = enabled;
+
+        if (!enabled)
+        {
+            controller?.StopMovement();
+            rb.velocity = Vector2.zero;
+        }
+    }
+
+    // ===== Wander API =====
+    public void SetWanderBounds(Rect bounds) => wanderBounds = bounds;
+
+    public void NotifyPlayerDied()
+    {
+        if (isDead) return;
+        PlayScreamSFX();
+        EnterWanderMode();
+    }
+
+    private void EnterWanderMode()
+    {
+        combatEnabled = false;          // apaga combate
+        StopAllCoroutines();
+        controller.StopMovement();
+        rb.velocity = Vector2.zero;
+
+        // Limpieza de animación: sólo “Run” activo para caminar normal, Idle off.
+        ResetAnimatorCombatTriggers();
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", true);
+
+        // Cambia a Wander
+        stateMachine.ChangeState(new MinotaurWanderState(stateMachine, wanderBounds));
+    }
+
+    private void ResetAnimatorCombatTriggers()
+    {
+        if (animator == null) return;
+        animator.ResetTrigger("MeleeAttack");
+        animator.ResetTrigger("RangedAttack");
+        animator.ResetTrigger("Dash");
+        animator.ResetTrigger("Die");
+    }
+
+    // ===== IHittable =====
+    public void OnGetHit() { }
 
     public void GetHit(int damage, GameObject dealer)
     {
-        if (isDead) return;
+        if (isDead || isDormant) return;
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
         OnHit?.Invoke();
         PlayDamageFlash();
 
-        if (currentHealth <= 0)
-            Die();
-    }
-
-    private void PlayDamageFlash()
-    {
-        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
-        flashCoroutine = StartCoroutine(FlashCoroutine());
-    }
-
-    private IEnumerator FlashCoroutine()
-    {
-        spriteRenderer.color = flashColor;
-        yield return new WaitForSeconds(flashDuration);
-        spriteRenderer.color = originalColor;
-    }
-
-
-    public void FireRangedProjectile()
-    {
-        if (projectilePrefab == null || firePoint == null || isDead) return;
-
-        // Dirección hacia la que apunta el WeaponParent (eje X)
-        Vector2 direction = firePoint.right.normalized;
-
-        // Instanciamos el proyectil
-        GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        proj.transform.right = direction;
-
-        // Aplicamos datos
-        MinotaurProjectile bullet = proj.GetComponent<MinotaurProjectile>();
-        if (bullet != null)
-            bullet.bulletData = minotaurBulletData;
-
-        RegisterRangedAttack(); // Para limitar disparos
-    }
-
-    public void OnAttackAnimationEnd()
-    {
-        stateMachine.ChangeState(new MinotaurChaseState(stateMachine));
+        if (currentHealth <= 0) Die();
     }
 
     private void Die()
     {
         isDead = true;
+        ResetAnimatorCombatTriggers();
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", false);
         animator.SetTrigger("Die");
         OnDeath?.Invoke();
         stateMachine.ChangeState(null);
         controller.StopMovement();
     }
-    public bool CanDoRangedAttack() => rangedAttackCooldownTimer <= 0f && rangedAttacksDone < maxRangedAttacks;
+
+    // ===== Ranged =====
+    public void FireRangedProjectile()
+    {
+        if (projectilePrefab == null || firePoint == null || isDead || isDormant || !combatEnabled) return;
+
+        Vector2 direction = firePoint.right.normalized;
+        GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        proj.transform.right = direction;
+
+        var bullet = proj.GetComponent<MinotaurProjectile>();
+        if (bullet != null) bullet.bulletData = minotaurBulletData;
+
+        RegisterRangedAttack();
+    }
+
+    public bool CanDoRangedAttack() => combatEnabled && rangedAttackCooldownTimer <= 0f && rangedAttacksDone < maxRangedAttacks;
 
     public void RegisterRangedAttack()
     {
@@ -164,8 +219,11 @@ public class MinotaurBoss : MonoBehaviour, IHittable
             rangedAttackCooldownTimer = rangedAttackCooldown;
     }
 
+    // ===== Dash helper =====
     public void StartDashTowardPlayer(float dashSpeed, float dashDuration)
     {
+        if (isDormant || !combatEnabled) return;
+
         Transform player = GameObject.FindWithTag("Player")?.transform;
         if (player == null) return;
 
@@ -176,19 +234,53 @@ public class MinotaurBoss : MonoBehaviour, IHittable
     private IEnumerator DashRoutine(Vector2 direction, float speed, float duration)
     {
         float elapsed = 0f;
-        while (elapsed < duration)
+        while (elapsed < duration && !isDormant && !isDead && combatEnabled)
         {
             elapsed += Time.fixedDeltaTime;
             rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
             yield return new WaitForFixedUpdate();
         }
 
+        if (combatEnabled)
+            stateMachine.ChangeState(new MinotaurChaseState(stateMachine));
+    }
+
+    // ===== VFX / SFX =====
+    private void PlayDamageFlash()
+    {
+        if (spriteRenderer == null) return;
+        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = StartCoroutine(FlashCoroutine());
+    }
+
+    private IEnumerator FlashCoroutine()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = flashColor;
+            yield return new WaitForSeconds(flashDuration);
+            spriteRenderer.color = originalColor;
+        }
+    }
+
+    private void PlayScreamSFX()
+    {
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlaySound(minotaurScreamSFX, transform.position);
+    }
+
+    public void OnAttackAnimationEnd()
+    {
+        if (isDormant || isDead || !combatEnabled) return;
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", true);
         stateMachine.ChangeState(new MinotaurChaseState(stateMachine));
     }
 
     public Animator GetAnimator() => animator;
     public MinotaurController GetController() => controller;
     public bool IsDead() => isDead;
+    public bool IsCombatEnabled() => combatEnabled;
     public GameObject GetProjectilePrefab() => projectilePrefab;
     public Transform GetFirePoint() => firePoint;
 }

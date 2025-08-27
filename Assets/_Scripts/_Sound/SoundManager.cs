@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Assets/_Scripts/Audio/SoundManager.cs
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
@@ -30,8 +31,26 @@ public class SoundManager : MonoBehaviour
         _oneShotInstances = new Dictionary<SoundType, List<EventInstance>>();
         _loopInstances = new Dictionary<SoundType, EventInstance>();
 
+        if (library == null || library.soundEvents == null)
+        {
+            Debug.LogWarning("[SoundManager] No SoundLibrarySO assigned.");
+            return;
+        }
+
+        // ✅ Construcción segura del mapa: ignora duplicados y avisa
+        HashSet<SoundType> seen = new HashSet<SoundType>();
         foreach (var evSO in library.soundEvents)
         {
+            if (evSO == null) continue;
+
+            if (seen.Contains(evSO.type))
+            {
+                Debug.LogWarning($"[SoundManager] Duplicated SoundType in SoundLibrary: {evSO.type}. " +
+                                 $"First occurrence kept, ignoring: {evSO.name}");
+                continue;
+            }
+
+            seen.Add(evSO.type);
             _eventByType[evSO.type] = evSO;
             _oneShotInstances[evSO.type] = new List<EventInstance>();
             _loopInstances[evSO.type] = default;
@@ -40,6 +59,7 @@ public class SoundManager : MonoBehaviour
 
     private void Update()
     {
+        // Reciclado de one-shots
         foreach (var kvp in _oneShotInstances)
         {
             var list = kvp.Value;
@@ -65,7 +85,7 @@ public class SoundManager : MonoBehaviour
     {
         if (!_eventByType.TryGetValue(type, out var evSO))
         {
-            Debug.LogWarning($"No se encontró configuración de sonido para {type}");
+            Debug.LogWarning($"[SoundManager] No SoundEventSO for {type}");
             return default;
         }
 
@@ -76,8 +96,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(SoundType type, Vector3 pos)
     {
-        if (!_eventByType.TryGetValue(type, out var evSO))
-            return;
+        if (!_eventByType.TryGetValue(type, out var evSO)) return;
 
         if (!evSO.ignoreHearingRange && !IsInHearingRange(pos, evSO.audibleRange))
             return;
@@ -90,7 +109,12 @@ public class SoundManager : MonoBehaviour
 
     private void PlayOneShot(SoundEventSO evSO, Vector3 pos)
     {
-        var list = _oneShotInstances[evSO.type];
+        if (!_oneShotInstances.TryGetValue(evSO.type, out var list))
+        {
+            list = new List<EventInstance>();
+            _oneShotInstances[evSO.type] = list;
+        }
+
         if (evSO.maxVoices > 0 && list.Count >= evSO.maxVoices)
             return;
 
@@ -135,7 +159,7 @@ public class SoundManager : MonoBehaviour
     {
         if (Camera.main == null)
         {
-            Debug.LogWarning("Camera.main is null — permitiendo sonido por seguridad.");
+            // Permitir por seguridad si no hay cámara principal
             return true;
         }
 

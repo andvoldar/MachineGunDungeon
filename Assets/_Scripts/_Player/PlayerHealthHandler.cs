@@ -44,6 +44,10 @@ public class PlayerHealthHandler : MonoBehaviour, IHittable
         {
             IsDead = true;
             deathHandler?.HandleDeath();
+
+            // Notificar al boss que el jugador murió
+            var boss = FindObjectOfType<MinotaurBoss>();
+            if (boss != null) boss.NotifyPlayerDied();
         }
     }
 

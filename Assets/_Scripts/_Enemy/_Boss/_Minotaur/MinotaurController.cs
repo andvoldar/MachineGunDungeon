@@ -14,6 +14,9 @@ public class MinotaurController : MonoBehaviour
     public bool isFacingRight = true;
     public bool IsFacingRight => isFacingRight;
 
+    [Tooltip("Umbral para decidir flip horizontal. Evita jitter cuando dir.x es muy pequeño.")]
+    [SerializeField] private float facingFlipDeadzone = 0.12f;
+
     private Transform player;
     private MinotaurWeaponController weaponController;
 
@@ -34,21 +37,24 @@ public class MinotaurController : MonoBehaviour
     {
         if (player != null && weaponController != null)
         {
+            // El propio WeaponController ignora el aim si el combate está desactivado.
             weaponController.AimWeapon(player.position);
         }
     }
-
 
     public void MoveTowards(Vector2 target)
     {
         if (!canMove) return;
 
-        Vector2 dir = (target - (Vector2)transform.position).normalized;
+        Vector2 dir = (target - (Vector2)transform.position);
+        float mag = dir.magnitude;
+        dir = (mag > 0.0001f) ? dir / mag : Vector2.zero;
         moveDir = dir;
 
-        if (dir.x > 0 && !isFacingRight)
+        // Flip con histéresis (evita tembleque)
+        if (dir.x > facingFlipDeadzone && !isFacingRight)
             Flip();
-        else if (dir.x < 0 && isFacingRight)
+        else if (dir.x < -facingFlipDeadzone && isFacingRight)
             Flip();
     }
 

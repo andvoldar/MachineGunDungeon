@@ -19,7 +19,7 @@ public class EnemyRoomLogic : RoomLogicBase
     public int destructibleCountMin = 3;
     public int destructibleCountMax = 8;
 
-    private List<Enemy> enemiesInRoom = new List<Enemy>();
+    private readonly List<Enemy> enemiesInRoom = new List<Enemy>();
     private List<Vector2Int> pendingEnemySpawns;
     private bool enemiesSpawned = false;
 
@@ -31,9 +31,10 @@ public class EnemyRoomLogic : RoomLogicBase
         SpawnDestructibleObjects();
         PrepareEnemySpawns(); // Aún NO instanciamos
 
+        // Si no habrá enemigos en esta sala, marcamos despejado silencioso (SIN SFX)
         if (pendingEnemySpawns.Count == 0)
         {
-            RaiseRoomCleared(); // no hay enemigos
+            MarkNoEnemiesAndClearSilently();
         }
     }
 
@@ -48,13 +49,11 @@ public class EnemyRoomLogic : RoomLogicBase
 
     private void PrepareEnemySpawns()
     {
-        if (enemyPrefabs == null || enemyPrefabs.Length == 0)
-        {
-            pendingEnemySpawns = new List<Vector2Int>();
-            return;
-        }
-
         pendingEnemySpawns = new List<Vector2Int>();
+
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0 || generator?.FloorPositions == null)
+            return;
+
         var cells = new List<Vector2Int>(generator.FloorPositions);
         Shuffle(cells);
 
@@ -82,10 +81,20 @@ public class EnemyRoomLogic : RoomLogicBase
             var e = go.GetComponent<Enemy>();
             if (e != null)
             {
+                // ✅ Informamos a la sala que hay un enemigo vivo
+                NotifyEnemySpawned();
+
                 enemiesInRoom.Add(e);
                 if (occupiedCells == null) occupiedCells = new HashSet<Vector2Int>();
                 occupiedCells.Add(cell);
-                e.OnDeath.AddListener(() => OnEnemyDied(e));
+
+                // Gancho de muerte -> sacar del listado + notificar a la sala
+                e.OnDeath.AddListener(() =>
+                {
+                    OnEnemyDied(e);
+                    NotifyEnemyDied(); // ✅ cuando llega a 0, la base llamará RaiseRoomCleared con SFX si hubo combate
+                });
+
                 e.TriggerSpawnVFX();
             }
             else
@@ -96,9 +105,10 @@ public class EnemyRoomLogic : RoomLogicBase
 
         enemiesSpawned = true;
 
+        // Si por lo que sea no se añadieron (prefabs sin Enemy component), limpiamos silencioso
         if (enemiesInRoom.Count == 0)
         {
-            RaiseRoomCleared();
+            MarkNoEnemiesAndClearSilently();
         }
     }
 
@@ -164,16 +174,19 @@ public class EnemyRoomLogic : RoomLogicBase
     private void OnEnemyDied(Enemy e)
     {
         enemiesInRoom.Remove(e);
-        if (enemiesInRoom.Count == 0)
-        {
-            RaiseRoomCleared();
-        }
+        // NOTA: la limpieza y SFX se gestionan en NotifyEnemyDied() de la base.
     }
 
     public override void RegisterListeners()
     {
         foreach (var e in enemiesInRoom)
-            e.OnDeath.AddListener(() => OnEnemyDied(e));
+        {
+            e.OnDeath.AddListener(() =>
+            {
+                OnEnemyDied(e);
+                NotifyEnemyDied();
+            });
+        }
     }
 
     public override void UnregisterListeners()
